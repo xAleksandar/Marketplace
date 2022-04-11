@@ -18,7 +18,7 @@ npx hardhat node
 npx hardhat test
 ```
 4. Deploy contracts and run react.
-5. ```bash
+```bash
 npx hardhat run --network localhost scripts/deploy.js
 npm start
 ```
