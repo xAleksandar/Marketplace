@@ -1,0 +1,8 @@
+stall react-bootstrap
+
+npx hardhat node
+npx hardhat test
+
+npx hardhat run --network localhost scripts/deploy.js
+
+npm start
