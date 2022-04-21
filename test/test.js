@@ -39,7 +39,34 @@ describe("Marketplace", function () {
     it("Should mint new NFTs", async function () {
         const nft = await Marketplace.mintNFT(0, "path");
         await nft.wait();
-        expect(await Marketplace.lengthItems()).to.equal(1);
+        
+        const secondnft = await Marketplace.mintNFT(0, "Path");
+        await secondnft.wait();
+        
+        expect(await Marketplace.lengthItems()).to.equal(2);
+    });
+
+    it("Should be able to bid on item", async function () {
+    	const [_, address2, address3, address4] = await ethers.getSigners();
+    	const placebid = await Marketplace.connect(address2).bidOnNFT(2, { value: 10 });
+    	const marketItem = await Marketplace.items(2);
+    	expect(marketItem.bidPrice).to.equal(10)
+    	
+    	const contractBalance = (await Marketplace.getBalance()).toString();
+    	expect(contractBalance).to.equal('10')
+    });
+    
+    it("Should be able to accept bid", async function () {
+    	const [_, address2, address3, address4] = await ethers.getSigners();
+    	const marketItem = await Marketplace.items(2);
+
+        const NFTContract = await hre.ethers.getContractAt("NFT", marketItem.nft);
+        await NFTContract.approve(MarketplaceAddress, marketItem.tokenId);
+   	const acceptBid = await Marketplace.acceptBid(2);
+   	
+   	const newMarketItem = await Marketplace.items(2);
+   	const newNFTContract = await hre.ethers.getContractAt("NFT", marketItem.nft);
+    	expect(await newNFTContract.ownerOf(newMarketItem.tokenId)).to.equal(address2.address);
     });
 
     it("Should put NFT for sale", async function () {

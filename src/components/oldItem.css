@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Neucha&display=swap');
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family:Oxygen, sans-serif;
+    margin:3rem;
+}
+
+.wrapper {
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(12rem, 16rem));
+    gap:2rem;
+    justify-content:center;
+}
+
+.card {
+    overflow:hidden;
+    box-shadow:0 2px 20px #ae3484;
+    border-radius:2px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    cursor:pointer;
+    transition:transform 200ms ease-in;
+    padding:10px;
+    width:50%;
+
+}
+
+.card__image {
+    height:12rem;
+    width:100%;
+    object-fit:cover;
+}

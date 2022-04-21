@@ -9,6 +9,7 @@ import Create from './Create.js'
 import MyListedItems from './MyListedItems.js'
 import MintNFT from './MintNFT.js'
 import MyItems from './MyItems.js'
+import Market from './Market.js'
 import MarketplaceAbi from  './contractsData/Marketplace.json'
 import MarketplaceAddress from './contractsData/Marketplace-address.json'
 import NFTFactoryAbi from './contractsData/NFTFactory.json'
@@ -59,17 +60,17 @@ function App() {
     <BrowserRouter>
       <div className="App">
         <>
-          <Navigation web3Handler={web3Handler} account={account} />
+          <Navigation className="Navibar" web3Handler={web3Handler} account={account} />
         </>
         <div>
           {loading ? (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
-              <Spinner animation="border" style={{ display: 'flex' }} />
-              <p className='mx-3 my-0'>Awaiting Metamask Connection...</p>
+              <h5><p className='mx-3 my-0 Loader'>Please connect your wallet.</p></h5>
             </div>
           ) : (
             <Routes>
               <Route path="/"  element={<Home marketplace={marketplace} account={account} NFTAbi={NFTAbi} signer={signer} />} />
+              <Route path="/Market"  element={<Market marketplace={marketplace} account={account} NFTAbi={NFTAbi} signer={signer} />} />
               <Route path="/create" element={<Create marketplace={marketplace} />}/>
               <Route path="/MintNFT" element={<MintNFT marketplace={marketplace} account={account} NFTAbi={NFTAbi} signer={signer}/>}/>
               <Route path="/my-listed-items" element={<MyListedItems marketplace={marketplace} account={account} NFTAbi={NFTAbi} signer={signer} />} />

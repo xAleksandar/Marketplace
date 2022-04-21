@@ -55,6 +55,8 @@ contract Marketplace is ReentrancyGuard {
         uint tokenId;
         ERC721 nft;
         uint price;
+        uint bidPrice;
+        address bidAddress;
         bool forSell;
     }
     //Uses NFT address + tokenId as unique identifier.
@@ -73,7 +75,7 @@ contract Marketplace is ReentrancyGuard {
         NFTnumber = NFTContract.mint(_tokenURI, msg.sender);
 
         tokenCount.increment();
-        items[tokenCount.current()] = Item (NFTnumber, NFTContract, 0, false);
+        items[tokenCount.current()] = Item (NFTnumber, NFTContract, 0, 0, address(this), false);
     }
 
     //Puts NFT for sell.
@@ -105,7 +107,53 @@ contract Marketplace is ReentrancyGuard {
         NFT(address(items[_itemId].nft)).transferFrom(currentOwner, msg.sender, items[_itemId].tokenId);
 
         items[_itemId].forSell = false;
+        items[_itemId].bidPrice = 0;
 
     }
 
+    //Used to send money to an address from the contract treasury instead msg.sender.
+    function sendMoney (address to, uint value) internal {
+        address payable receiver = payable(to);
+        receiver.transfer(value);
+    }
+    
+    //Place bid on NFT.
+    function bidOnNFT (uint _itemId) public payable {
+        //require(msg.value >= _price, "Not enough eth to cover gas fees");
+        require (msg.value > items[_itemId].bidPrice, "Your bid must be bigger than the current one.");
+        
+        //Returning the money of the latest bidder in case of outbid.
+        if (items[_itemId].bidPrice > 0) {
+            sendMoney(items[_itemId].bidAddress, items[_itemId].bidPrice);
+        }
+
+        items[_itemId].bidPrice = msg.value;
+        items[_itemId].bidAddress = msg.sender;
+    }
+
+    function getBalance() public view returns (uint256) {
+        return address(this).balance;
+    }
+
+    function getApproved(uint _itemId) public view returns(address) {
+        return NFT(address(items[_itemId].nft)).getApproved(items[_itemId].tokenId);
+    }
+
+    //Accept bid and transfer NFT.
+    function acceptBid (uint _itemId) public payable nonReentrant {
+        require (items[_itemId].bidPrice > 0, "No any bids.");
+
+        //Ensuring that the caller actually has the ownership of that NFT.
+        address currentOwner = NFT(address(items[_itemId].nft)).ownerOf(items[_itemId].tokenId);
+        require (currentOwner == msg.sender, "You are not the owner of this NFT.");
+
+        sendMoney(currentOwner, items[_itemId].bidPrice);
+        NFT(address(items[_itemId].nft)).transferFrom(currentOwner, items[_itemId].bidAddress, items[_itemId].tokenId);
+
+        items[_itemId].forSell = false;
+        items[_itemId].bidPrice = 0;
+    }
+
 }
+
+

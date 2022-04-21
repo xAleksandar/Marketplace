@@ -3,10 +3,10 @@ import {
 } from "react-router-dom";
 import { Navbar, Nav, Button, Container } from 'react-bootstrap'
 import market from './logo.jpeg'
-
+import './App.css'
 const Navigation = ({ web3Handler, account }) => {
     return (
-        <Navbar expand="lg" bg="secondary" variant="dark">
+        <Navbar expand="lg" className="Navibar" bg="secondary" variant="dark">
             <Container>
                 <Navbar.Brand href="">
                     <img src={market} width="40" height="40" className="" alt="" />
@@ -16,6 +16,7 @@ const Navigation = ({ web3Handler, account }) => {
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">
                         <Nav.Link as={Link} to="/">Home</Nav.Link>
+                        <Nav.Link as={Link} to="/Market">Market</Nav.Link>
                         <Nav.Link as={Link} to="/create">Create Collection</Nav.Link>
                         <Nav.Link as={Link} to="/MintNFT">Mint NFT</Nav.Link>
                         <Nav.Link as={Link} to="/my-listed-items">My Listed Items</Nav.Link>
@@ -34,7 +35,7 @@ const Navigation = ({ web3Handler, account }) => {
 
                             </Nav.Link>
                         ) : (
-                            <Button onClick={web3Handler} variant="outline-light">Connect Wallet</Button>
+                            <Button onClick={web3Handler} className="Navibar" variant="outline-light">Connect Wallet</Button>
                         )}
                     </Nav>
                 </Navbar.Collapse>

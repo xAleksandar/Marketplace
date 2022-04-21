@@ -70,7 +70,7 @@ const MyListedItems = ({ marketplace, account, NFTAbi, signer }) => {
   // useEffect(() => fetchUserItems(), [])
 
   return (
-    <div>
+    <div className="Container">
       {myitems.map(x => <li key={x.name}><MarketItem image={x.image} tokenid={x.tokenid} collection={x.collection} marketplace={marketplace} name={x.name} signer={signer} /></li>)}
     </div>
   );

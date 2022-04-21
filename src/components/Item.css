@@ -10,6 +10,7 @@
 
 body {
     font-family:Oxygen, sans-serif;
+    background-color: #252525;
     margin:3rem;
 }
 
@@ -21,21 +22,89 @@ body {
 }
 
 .card {
+    margin:10px;                             
     overflow:hidden;
-    box-shadow:0 2px 20px #ae3484;
-    border-radius:2px;
+    /*box-shadow:0 2px 20px #ae3484; */
+    background-color:black;
+    height:91%;
+    width: 100%;
+    border-radius:20px;                     /* smootva uglite na boksovete */
     display:flex;
     flex-direction:column;
-    justify-content:space-between;
+    /* justify-content:space-between; */
     cursor:pointer;
     transition:transform 200ms ease-in;
-    padding:10px;
-    width:50%;
+    padding: 10px;
+}
 
+.card:hover {
+    transform: scale(1.1,1.1);
+    box-shadow: 5px 5px 15px #ae3484;
 }
 
 .card__image {
-    height:12rem;
-    width:100%;
-    object-fit:cover;
+    height:20rem;
+    width:20rem;
+    object-fit:fill;
+    border-radius:20px;                     /* smootva uglite na boksovete */
+}
+
+.card__title {
+    color:#ae3484;
+    padding: 3px;
+}
+
+.card__info {
+    color: yellow;
+}
+
+.btn__mini {
+
+}
+
+.card__btn {
+    color: white;
+    background-color: lime;
+    border-radius:20px;
+    padding:5px;
+}
+
+.card__btn__sell__mini {
+    color: white;
+    background-color: lime;
+    border-radius:20px;
+    padding:5px;
+    width: 45%;
+}
+
+.card__btn__sell__mini:hover {
+    transform: scale(1.03,1.05);
+}
+
+.card__btn__bid__mini {
+    color: white;
+    background-color: rgb(106, 160, 241);
+    border-radius:20px;
+    padding:5px;
+    width: 45%;
+}
+
+.card__btn__bid__mini:hover {
+    transform: scale(1.03,1.05);
+}
+
+.card__btn__bid {
+    color: white;
+    background-color: rgb(106, 160, 241);
+    border-radius:20px;
+    padding:5px;
+}
+
+.card__price__bar{
+    border-radius: 15px;
+    margin:5px 0px;
+}
+
+.card__btn:hover {
+    transform: scale(1.03,1.05);
 }
