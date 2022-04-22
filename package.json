@@ -9,7 +9,7 @@
     "@testing-library/user-event": "^13.5.0",
     "ipfs-http-client": "^56.0.2",
     "react": "^18.0.0",
-    "react-bootstrap": "^2.2.3",
+    "react-bootstrap": "^2.3.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.0",

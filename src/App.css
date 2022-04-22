@@ -28,6 +28,31 @@
   color: #61dafb;
 }
 
+.Home__Body {
+  padding: 30px 800px;
+}
+
+.address__search__bar {
+  display: flex;
+  width: 100%;
+  border-radius: 20px;
+  position: relative;
+  align-items: center;
+}
+
+.address__search__btn {
+  border-radius: 20px;
+  padding: 5px 10px;
+  margin: -43px 250px;
+  transition: 0.2s;
+  position: absolute;
+}
+
+.address__search__btn:hover {
+  transform: scale(1.03,1.05);
+  background-color: greenyellow;
+}
+
 .Container {
   display: flex;
   flex-direction: row;
