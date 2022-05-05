@@ -13,6 +13,8 @@ const MyItems = ({ marketplace, account, NFTAbi, signer }) => {
   const [loading, setLoading] = useState(true)
   const [loadingMessage, setLoadingMessage] = useState("Loading items..")
   const [myitems, setMyitems] = useState([])
+  const [userAddress, setUserAddress] = useState("0")
+  const [trigger, setTrigger] = useState("")
 
   useEffect(() => {
   async function fetchUserItems() {
@@ -85,26 +87,35 @@ const MyItems = ({ marketplace, account, NFTAbi, signer }) => {
 
   }, [])
 
-  return (
+  if (myitems.length == 0) {
+    return (
       <div className="App">
-        <div>
-          {loading ? (
-            <div className="Loader">
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
-                <h5><Spinner className="Loader" animation="border" style={{ display: 'flex' }} /></h5>
-                <h5><p className='mx-3 my-0 Loader'>{loadingMessage}</p></h5>
-              </div>
-            </div>
-          ) : (
-            <div className="Container">
-              {myitems.map(x => <li key={x.name}><span><CardItem image={x.image} tokenid={x.tokenid} approved={x.approved} collection={x.collection} bidPrice={x.bidPrice} marketplace={marketplace} name={x.name} signer={signer} /></span></li>)}
-            </div>
-          )}
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
+          <h5><p className='mx-3 my-0 Loader'>No items to show.</p></h5>
         </div>
       </div>
+    );
+  
+  } else {
 
-  );
-
-}
+    return (
+        <div className="App">
+          <div>
+            {loading ? (
+              <div className="Loader">
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
+                  <h5><Spinner className="Loader" animation="border" style={{ display: 'flex' }} /></h5>
+                  <h5><p className='mx-3 my-0 Loader'>{loadingMessage}</p></h5>
+                </div>
+              </div>
+            ) : (
+              <div className="Container">
+                {myitems.map(x => <li key={x.name}><span><CardItem image={x.image} tokenid={x.tokenid} approved={x.approved} collection={x.collection} bidPrice={x.bidPrice} marketplace={marketplace} name={x.name} signer={signer} /></span></li>)}
+              </div>
+            )}
+          </div>
+        </div>
+    );
+}}
 
 export default MyItems

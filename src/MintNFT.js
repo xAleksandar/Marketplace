@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react'
 import { ethers } from "ethers"
+import { useState, useEffect } from 'react'
 import { Row, Form, Button } from 'react-bootstrap'
 import { create as ipfsHttpClient } from 'ipfs-http-client'
 const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0')
 
 const MintNFT = ({ marketplace, account, NFTAbi, signer }) => {
+  
   const [image, setImage] = useState('')
   const [collections, setCollections] = useState([]);
   const [collectionNames, setCollectionNames] = useState([]);
@@ -51,6 +52,7 @@ const MintNFT = ({ marketplace, account, NFTAbi, signer }) => {
     setUseCollection(newcollections[0])
   
   }
+
   loadNFT()
   }, [])
 
@@ -61,32 +63,14 @@ const MintNFT = ({ marketplace, account, NFTAbi, signer }) => {
       }
     }
   }
-  
-  // useEffect(() => loadNFT(), [])
 
   return (
-    <div className="container-fluid mt-5">
-      <div className="row">
-        <main role="main" className="col-lg-12 mx-auto" style={{ maxWidth: '1000px' }}>
-          <div className="content mx-auto">
-            <Row className="g-4">
-              {collectionNames.map(x => <li key={x}><Button onClick={() => changeCollection(x)} >{x}</Button></li>)}
-              <Form.Control
-                type="file"
-                required
-                name="file"
-                onChange={uploadToIPFS}
-              />
-              
-              <div className="d-grid px-0">
-                <Button onClick={createNFT} variant="primary" size="lg">
-                  Mint NFT!
-                </Button>
-              </div>
-            </Row>
-          </div>
-        </main>
-      </div>
+    <div className="CreateNFT">
+      {collectionNames.map(x => <li key={x}><Button className="CollectionBtn" onClick={() => changeCollection(x)} >{x}</Button></li>)}
+      <Form.Control className = "CreateNFTFile" type="file" required name="file" onChange={uploadToIPFS} />
+      <Button className="CreateNFTMintBtn" onClick={createNFT} variant="primary" size="lg">
+        Mint NFT!
+      </Button>
     </div>
   );
 }
