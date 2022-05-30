@@ -1,8 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+// import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
+// import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
@@ -29,7 +31,7 @@ contract Marketplace is ReentrancyGuard {
     
 
     // Collections storage (Array)
-    ERC721[] private collections;
+    ERC721Upgradeable[] private collections;
 
     //Create new collection and store it (=) Mint new NFT contract.
     function createCollection (string memory _name, string memory _ticker) public nonReentrant {
@@ -37,7 +39,7 @@ contract Marketplace is ReentrancyGuard {
     }
     
     //Return all collections
-    function returnCollections() external view returns (ERC721[] memory) {
+    function returnCollections() external view returns (ERC721Upgradeable[] memory) {
     	return collections;
     }
     
@@ -53,7 +55,7 @@ contract Marketplace is ReentrancyGuard {
     //Used to store info about all existing NFTs.
     struct Item {
         uint tokenId;
-        ERC721 nft;
+        ERC721Upgradeable nft;
         uint price;
         uint bidPrice;
         address bidAddress;
@@ -155,5 +157,3 @@ contract Marketplace is ReentrancyGuard {
     }
 
 }
-
-

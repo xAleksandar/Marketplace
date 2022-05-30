@@ -19,6 +19,7 @@ The main object of this project is to have a highly (gas) efficient set of contr
 npm install
 npm install react-bootstrap
 npm install @openzeppelin/contracts
+npm install @openzeppelin/contracts-upgradeable
 ```
 2. Run the node
 ```bash
