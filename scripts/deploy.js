@@ -1,20 +1,10 @@
 async function main() {
-  
-  const NFTFactory = await ethers.getContractFactory("NFTFactory");
-  const nftfactory = await NFTFactory.deploy();
-  const nftfactoryAddress = nftfactory.address;
-  saveFrontendFiles(nftfactory , "NFTFactory");
-  console.log('NFTfactory deployed at: ', nftfactory.address);
 
   const Marketplace = await ethers.getContractFactory("Marketplace");
-  const marketplace = await Marketplace.deploy(nftfactoryAddress);
+  const marketplace = await Marketplace.deploy();
   saveFrontendFiles(marketplace , "Marketplace");
   console.log('Marketplace deployed at: ', marketplace.address);
-
-  const NFT = await ethers.getContractFactory("NFT");
-  const nft = await NFT.deploy("Victoria", "VIKI");
-  saveFrontendFiles(nft, "NFT");
-  console.log('NFT Contract deployed at: ', nft.address);
+  
 }
 
 function saveFrontendFiles(contract, name) {
