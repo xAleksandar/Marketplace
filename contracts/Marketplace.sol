@@ -23,7 +23,18 @@ contract Marketplace is ReentrancyGuard {
 
 
     //===================================//
+
+    //              EVENTS               //
+
+    //===================================//
     
+
+    event newCollection (address collectionAddress,address owner);
+
+    event nft (string action, uint id, address issuer);
+
+
+
     // COLLECTIONS MANAGEMENT
     
     // Template of Collection object
@@ -42,27 +53,34 @@ contract Marketplace is ReentrancyGuard {
     // Collections storage (Array)
     collection[] public collections;
 
+
+
     // Function createCollection, used to create new Collection and store it in the collections array.
     // Param: _name, the name of the new Collection.
     // Param: ImageLink(Optional): String used to store the link or base64 encoded version of the Collection Logo.
     // Param: info(Optional): Used to store collection description.
 
     function createCollection (string memory _name, string memory _ticker, string calldata _imageLink, string memory _info) external {
+        ERC721Upgradeable _contract = NFTFactoryContract.createNFTContract(_name, _ticker, msg.sender);
         collections.push(
             collection(
-                NFTFactoryContract.createNFTContract(_name, _ticker, msg.sender), 
+                _contract, 
                 msg.sender, 
                 _imageLink, 
                 _info
             )
         );
+
+        emit newCollection (address(_contract), msg.sender);
     }
     
+
     // Function returnCollections, used to return all Collections tracked by the Marketplace.
     function returnCollections() external view returns (collection[] memory) {
     	return collections;
     }
     
+
     // Function returnCollectionsLength, used to return the length of the collections array.
     function returnCollectionsLength() external view returns (uint) {
         return collections.length;
@@ -90,8 +108,10 @@ contract Marketplace is ReentrancyGuard {
         bool forSell;
     }
 
+
     // Mapping to store all the NFTs using the ID as key.
     mapping (uint256 => Item) public items;
+
 
     // Function returnItemsLength, used to return the total items count.
     function returnItemsLength() external view returns (uint) {
@@ -111,7 +131,10 @@ contract Marketplace is ReentrancyGuard {
 
         tokenCount.increment();
         items[tokenCount.current()] = Item (NFTnumber, NFTContract, 0, 0, address(this), false);
+
+        emit nft ("Mint", tokenCount.current(), msg.sender);
     }
+
 
     // Function sellNFT, used to put NFT for sale in the Marketplace.
     // Param: _itemId - The NFT ID (In the Marketplace contract).
@@ -124,7 +147,10 @@ contract Marketplace is ReentrancyGuard {
         items[_itemId].price = _price;
         items[_itemId].forSell = true;
 
+        emit nft ("Sell", _itemId, msg.sender);
+
     }
+
 
     // Function cancelSell, used to cancel the sell of a NFT.
     // Param: _itemId - The NFT ID (In the Marketplace contract).
@@ -133,6 +159,8 @@ contract Marketplace is ReentrancyGuard {
         require (NFT(address(items[_itemId].nft)).ownerOf(items[_itemId].tokenId) == msg.sender, "This is not your NFT.");
 
         items[_itemId].forSell = false;
+
+        emit nft ("CancelSell", _itemId, msg.sender);
     }
 
 
@@ -152,7 +180,9 @@ contract Marketplace is ReentrancyGuard {
         (bool sent,) = currentOwner.call{value: items[_itemId].price}("");
         require(sent, "Unable to transfer funds.");
 
+        emit nft ("Buy", _itemId, msg.sender);
     }
+
 
     // Function sendFunds, used to send funds to an address from the contract treasury instead of msg.sender.
     // Param: _to - The recepient address.
@@ -162,7 +192,8 @@ contract Marketplace is ReentrancyGuard {
         (bool _sent,) = _to.call{value: _value}("");
         require(_sent, "Unable to transfer funds.");
     }
-    
+
+
     // Function bidOnNFT, used to Bid or outbid a price for NFT.
     // Param: _itemId - The (Marketplace) ID of the NFT.
     // Notice: The bid price is msg.value after gas costs. 
@@ -177,7 +208,10 @@ contract Marketplace is ReentrancyGuard {
 
         items[_itemId].bidPrice = msg.value;
         items[_itemId].bidAddress = msg.sender;
+
+        emit nft ("Bid", _itemId, msg.sender);
     }
+
 
     // Function getBalance, returns the Marketplace balance.
 
@@ -185,12 +219,14 @@ contract Marketplace is ReentrancyGuard {
         return address(this).balance;
     }
 
+
     //Function getApproved, returns the address that is approved to manage the NFT.
     // Param: _itemId - The (Marketplace) ID of the NFT.
 
     function getApproved(uint _itemId) public view returns(address) {
         return NFT(address(items[_itemId].nft)).getApproved(items[_itemId].tokenId);
     }
+
 
     // Function acceptBid, used to accept current bid and transfer the NFT.
     // Param: _itemId - The (Marketplace) ID of the NFT.
@@ -207,6 +243,8 @@ contract Marketplace is ReentrancyGuard {
 
         items[_itemId].forSell = false;
         items[_itemId].bidPrice = 0;
+
+        emit nft ("AcceptBid", _itemId, msg.sender);
     }
 
 }

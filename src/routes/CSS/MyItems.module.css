@@ -1,0 +1,48 @@
+.Container {
+  display: flex;
+  flex-direction: column;
+}
+
+.ItemContainer {
+  
+}
+
+.Modal {
+  margin: 10px auto;
+}
+
+.Item {
+  margin: 10px auto;
+
+}
+
+.ItemsRow {
+  display: flex;
+  height: 60vh;
+  max-height: 60vh;
+}
+
+.AddressSearchBox {
+  min-width: 500px;
+  max-width: 500px;
+  display: flex;
+  align-items: center;
+  margin: 10px auto;
+}
+
+.AddressSearchBar {
+  position: relative;
+  border-radius: 20px;
+}
+
+.AddressSearchBtn {
+  position: absolute;
+  left: 1110px;
+  padding: 5px 15px;
+  border-radius: 20px;
+}
+
+.AddressSearchBtn:hover {
+  transform: scale(1.03,1.05);
+  background-color: greenyellow;
+}

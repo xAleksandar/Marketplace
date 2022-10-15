@@ -12,8 +12,10 @@ const CardItem = (props) => {
     const [sellstate, setSellState] = useState(0)
 
     async function approveMarketplace() {
-        const NFTcontract = new ethers.Contract(props.collection, NFTAbi.abi, props.signer)
+        const NFTcontract = new ethers.Contract(props.collection.Contract, NFTAbi.abi, props.signer)
         const approved = await NFTcontract.approve(MarketplaceAddress.address, props.tokenid)
+        await new Promise(r => setTimeout(r, 6000));
+        window.location.reload()
     }
 
     function changeSellState() {
@@ -30,14 +32,14 @@ const CardItem = (props) => {
 
     async function acceptBid() {
         const marketplace = new ethers.Contract(MarketplaceAddress.address, MarketplaceAbi.abi, props.signer)
-        const totalitems = (await marketplace.lengthItems()).toString()
+        const totalitems = (await marketplace.returnItemsLength()).toString()
 
         for (let i = 0; i <= totalitems; i++) {
             let nft = await marketplace.items(i)
             let nftid = nft.tokenId.toString()
             let nftaddress = nft.nft
             
-            if (nftid == props.tokenid && nftaddress == props.collection) {
+            if (nftid == props.tokenid && nftaddress == props.collection.Contract) {
                 let bidnft = await marketplace.acceptBid(i)
             }
         }
@@ -46,14 +48,14 @@ const CardItem = (props) => {
     async function sell() {
         const weiprice = ethers.utils.parseEther(price.toString())
         const marketplace = new ethers.Contract(MarketplaceAddress.address, MarketplaceAbi.abi, props.signer)
-        const totalitems = (await marketplace.lengthItems()).toString()
+        const totalitems = (await marketplace.returnItemsLength()).toString()
         
         for (let i = 0; i <=totalitems; i++) {
             let nft = await marketplace.items(i)
             let nftid = nft.tokenId.toString()
             let nftaddress = nft.nft
             
-            if (nftid == props.tokenid && nftaddress == props.collection) {
+            if (nftid == props.tokenid && nftaddress == props.collection.Contract) {
                 await marketplace.sellNFT(i, weiprice)
             }
         }

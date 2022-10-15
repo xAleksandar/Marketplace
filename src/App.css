@@ -1,5 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .App {
   text-align: center;
+  background-color: #282c34;
 }
 
 .App-logo {
@@ -11,6 +16,11 @@
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
+}
+
+.NaviBox {
+  max-width: 90%;
+  margin: 10px auto;
 }
 
 .App-header {
@@ -28,8 +38,11 @@
   color: #61dafb;
 }
 
+.Hi {
+  background-color: red;
+}
+
 .Home__Body {
-  padding: 30px 800px;
 }
 
 .Body {
@@ -53,13 +66,10 @@
 }
 
 .CollectionMintBtn {
-  max-width: 100%;
-  padding: 20px 70px auto;
-}
-
-.CollectionMintBtn {
-  padding: 10px 175px;
+  padding: 10px 60px;
+  margin: 15px auto;
   font-size:  20px;
+  background-color: lime;
 }
 
 /*************************/
@@ -86,12 +96,18 @@
 
 /*************************/
 
+/*
 .address__search__bar {
   display: flex;
   width: 100%;
   border-radius: 20px;
   position: relative;
   align-items: center;
+} */
+
+.address__search {
+  background-color: red;
+  min-width: 600px;
 }
 
 .address__search__btn {
@@ -107,6 +123,8 @@
   background-color: greenyellow;
 }
 
+/*************************/
+
 .Container {
   display: flex;
   flex-direction: row;
@@ -116,6 +134,14 @@
 
 .Navibar {
   border-radius: 20px;
+}
+
+.ButtonGroup {
+  padding: 25px 0px;
+}
+
+.ButtonToggle {
+  border-radius: 10px;
 }
 
 .Loader {
@@ -128,4 +154,16 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+
+
+.LoadingComponent {
+  height: 80vh;
+}
+
+.LoadingMessage {
+  color: royalblue;
+  font-size: 40px;
+  padding: 30vh 0vh;
 }

@@ -1,0 +1,116 @@
+
+.CollectionsContainer {
+  width: 100%;
+}
+
+.LoadingComponent {
+  height: 80vh;
+  padding: 30vh 0px 0px 0px;
+}
+
+.Collection {
+  padding: 20px;
+  margin: 0px auto;
+  width: 60%;
+  height: 20vh;
+  max-height: 20vh;
+  background-color: rgba(211, 211, 211, 0.2);
+  border: 4px solid royalblue;
+  border-radius: 25px;
+  display: flex;
+  
+}
+
+.CollectionImage {
+  border-radius: 10px;
+}
+
+.CollectionBody {
+  width: 100%;
+  height: 100%;
+  padding: 0px 0px 0px 10px;
+}
+
+.CollectionNames {
+  display: flex;
+}
+
+.CollectionName {
+  color: white;
+  font-size: 30px;
+  padding: 5px;
+  width: 70%;
+  border-left: 4px solid royalblue;
+  border-bottom: 4px solid royalblue;
+}
+
+.CollectionSymbol {
+  color: white;
+  font-size: 30px;
+  padding: 5px;
+  width: 30%;
+  border-left: 4px solid royalblue;
+  border-bottom: 4px solid royalblue;
+}
+
+.CollectionBottom {
+  display: flex;
+  border-left: 4px solid royalblue;
+}
+
+.CollectionInfo {
+  color: white;
+  width: 70%;
+  text-align: left;
+  padding: 10px;
+}
+
+.CollectionMintBtnBox {
+  width: 30%;
+  border-left: 4px solid royalblue;
+}
+
+.CollectionMintBtn {
+  background-color: lime;
+  width: 50%;
+  font-size: 25px;
+  margin: 25px auto;
+  border-radius: 10px; 
+}
+
+.CollectionMintBtn:hover {
+  transform: scale(1.03,1.05);
+  background-color: greenyellow;
+}
+
+.MintBody {
+  width: 30%;
+  margin: 40px auto;
+  justify-content: space-around;
+}
+
+.BackBtn {
+  background-color: royalblue;
+  width: 40%;
+  max-width: 40%;
+  font-size: 25px;
+  margin: 25px auto;
+  border-radius: 10px; 
+}
+
+.NFTMintBtn {
+  background-color: lime;
+  width: 40%;
+  max-width: 40%;
+  font-size: 25px;
+  margin: 25px auto;
+  border-radius: 10px; 
+}
+
+.ModalBox{
+  position: absolute;
+  margin: 10px -60px;
+}
+
+.Modal {
+}

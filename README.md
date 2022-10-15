@@ -1,39 +1,46 @@
-# NFT Marketplace - In progress
+# NFT Marketplace
 
-The main object of this project is to have a highly (gas) efficient set of contracts with most of the job done in the front end.
+The main object of this project is to have a highly (gas) efficient and secure set of contracts with a simple frontend for interaction with them.
 
 # Features
 
 1) Each collection has it's own smart contract (Like OpenSea).
-2) Clear smart contracts with optimized storage use.
+2) Clear smart contracts with optimised storage use.
 3) Bids.
 
 # To-Do List:
 1) Clear Frontend visual issues (Messages, component styling, etc).
-2) Add more functionalities when minting new collections (NFT Count limits, Choose between IPFS/Onchain hosted images, etc).
-3) Auctions.
+2) Auctions.
 
 # Setup
+
+Register at infura.com and obtain a pair of api keys for the ipfs provider. The keys then should be saved in the infura.json file in the src directory.
+
 1. Install packages
 ```bash
-npm install
-npm install react-bootstrap
-npm install @openzeppelin/contracts
-npm install @openzeppelin/contracts-upgradeable
+npm install (in case of error, rerun with the parameter --legacy-peer-deps)
 ```
-2. Run the node
+2. Run the frontend.
+```bash
+npm start
+```
+
+The front end is currently working with contracts minted on goerli test network. If you wish to run them on a local blockchain, follow the steps:
+
+1. Run the blockchain.
 ```bash
 npx hardhat node
 ```
-3. Perform tests.
-```bash
-npx hardhat test
-```
-4. Deploy contracts and run react.
+2. Deploy the contracts.
 ```bash
 npx hardhat run --network localhost scripts/deploy.js
-npm start
 ```
+3. Connect your Metamask wallet to the blockchain.
+
+# Videos
+
+1) Simple marketplace tour.
+https://youtu.be/7V0RmTl4Snc
 
 # Screenshots
 

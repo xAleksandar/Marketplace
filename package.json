@@ -3,16 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@openzeppelin/contracts": "^4.5.0",
+    "@openzeppelin/contracts": "^4.7.3",
+    "@openzeppelin/contracts-upgradeable": "^4.7.3",
+    "@tailwindcss/postcss7-compat": "^2.2.17",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
+    "buffer": "^6.0.3",
     "ipfs-http-client": "^56.0.2",
     "react": "^18.0.0",
-    "react-bootstrap": "^2.3.0",
+    "react-bootstrap": "^2.5.0",
+    "react-checkmark": "^1.4.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.0",
+    "react-spinners": "^0.13.4",
+    "react-spinners-kit": "^1.9.1",
+    "styled-components": "^5.3.6",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -42,9 +49,12 @@
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.5",
     "@nomiclabs/hardhat-waffle": "^2.0.3",
+    "autoprefixer": "^10.4.12",
     "chai": "^4.3.6",
     "ethereum-waffle": "^3.4.4",
     "ethers": "^5.6.2",
-    "hardhat": "^2.9.3"
+    "hardhat": "^2.9.3",
+    "postcss": "^8.4.17",
+    "tailwindcss": "^3.1.8"
   }
 }

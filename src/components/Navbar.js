@@ -3,19 +3,21 @@ import {
 } from "react-router-dom";
 import { Navbar, Nav, Button, Container } from 'react-bootstrap'
 import market from './logo.jpeg'
-import './App.css'
+//import './App.css'
 const Navigation = ({ web3Handler, account }) => {
     return (
         <Navbar expand="lg" className="Navibar" bg="secondary" variant="dark">
             <Container>
-                <Navbar.Brand href="">
+                <Navbar.Brand style={{ display: "flex" }} href="">
+                    {/*<img src={market} width="40" height="40" className="" alt="" /> */}
                     <img src={market} width="40" height="40" className="" alt="" />
-                    &nbsp; NFT Marketplace
+                    <h1 style={{margin: "8px auto"}}>&nbsp; NFT Marketplace</h1>
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">
                         <Nav.Link as={Link} to="/">Home</Nav.Link>
+                        <Nav.Link as={Link} to="/Collections">Collections</Nav.Link>
                         <Nav.Link as={Link} to="/create">Create Collection</Nav.Link>
                         <Nav.Link as={Link} to="/MintNFT">Mint NFT</Nav.Link>
                         <Nav.Link as={Link} to="/my-listed-items">My Listed Items</Nav.Link>

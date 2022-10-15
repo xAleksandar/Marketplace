@@ -1,10 +1,9 @@
 import React, {useState} from 'react'
 import { Row, Form, Button } from 'react-bootstrap'
-import './Item.css'
+import styles from './CSS/HomeItem.module.css'
 import { ethers } from "ethers"
 import MarketplaceAbi from  './../contractsData/Marketplace.json'
 import MarketplaceAddress from './../contractsData/Marketplace-address.json'
-import NFTAbi from './../contractsData/NFT.json'
 
 const HomeItem = (props) => {
 
@@ -13,6 +12,7 @@ const HomeItem = (props) => {
     const [bidstate, setBidState] = useState(0)
 
     async function buyNFT() {
+
         const marketplace = new ethers.Contract(MarketplaceAddress.address, MarketplaceAbi.abi, props.signer)
         const totalitems = (await marketplace.lengthItems()).toString()
         
@@ -40,7 +40,7 @@ const HomeItem = (props) => {
             let nftaddress = nft.nft
             
             if (nftid == props.tokenid && nftaddress == props.collection) {
-                props.bid(i, weiprice);
+                let bidnft = await marketplace.bidOnNFT(i, { value: weiprice})
             }
         }
     }
@@ -55,46 +55,46 @@ const HomeItem = (props) => {
         
         if (bidstate == 0) {
             setBidState(1)
+            console.log('Set to 1')
         }
     }
 
 
 if (props.forSell == true) {
     return (
-        <div className="card">
-            <div className="card__body">
-                <img src={props.image} className="card__image" />
-                <h2 className="card__title">{props.name}</h2>
-                <h2 className="card__info">Price: {props.price} ETH</h2>
+        <div className={styles.Card}>
+            <div className={styles.CardBody}>
+                <img src={props.image} className={styles.CardImage} />
+                <h2 className={styles.CardTitle}>{props.name}</h2>
+                <h2 className={styles.CardInfo}>Price: {props.price} ETH</h2>
             </div>
-            <button onClick={() => buyNFT()} className="card__btn"><h5>Buy NFT</h5></button>
+            <button onClick={() => buyNFT()} className={styles.CardBuyBtn}><h5>Buy NFT</h5></button>
         </div>
     )
 } else {
     if (bidstate == 1){
         return (
-            <div className="card">
-                <div className="card__body">
-                    <img src={props.image} className="card__image" />
-                    <h2 className="card__title">{props.name}</h2>
-                    <h2 className="card__info">Current Bid: {props.bidPrice} ETH</h2>
+            <div className={styles.Card}>
+                <div className={styles.CardBody}>
+                    <img src={props.image} className={styles.CardImage} />
+                    <h2 className={styles.CardTitle}>{props.name}</h2>
+                    <h2 className={styles.CardInfo}>Current Bid: {props.bidPrice} ETH</h2>
                 </div>
-                
-                <Form.Control className="card__price__bar" onChange={(e) => setBidPrice(e.target.value)} size="sm" required type="number" placeholder="Price in ETH" />
-                <button onClick={() => changeBidState()} className="card__btn__bid"><h5>Outbid</h5></button>
+                <Form.Control className={styles.CardPriceBar} onChange={(e) => setBidPrice(e.target.value)} size="sm" required type="number" placeholder="Price in ETH" />
+                <button onClick={() => changeBidState()} className={styles.CardBidBtn}><h5>Outbid</h5></button>
             </div>
     )
 
     } else {
         return (
-            <div className="card">
-                <div className="card__body">
-                    <img src={props.image} className="card__image" />
-                    <h2 className="card__title">{props.name}</h2>
-                    <h2 className="card__info">Current Bid: {props.bidPrice} ETH</h2>
+            <div className={styles.Card}>
+                <div className={styles.CardBody}>
+                    <img src={props.image} className={styles.CardImage} />
+                    <h2 className={styles.CardTitle}>{props.name}</h2>
+                    <h2 className={styles.CardInfo}>Current Bid: {props.bidPrice} ETH</h2>
                 </div>
 
-                <button onClick={() => changeBidState()} className="card__btn__bid"><h5>Outbid</h5></button>
+                <button onClick={() => changeBidState()} className={styles.CardBidBtn}><h5>Outbid</h5></button>
             </div>   
     )
     } 
