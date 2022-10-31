@@ -32,11 +32,12 @@ contract NFT is ERC721URIStorageUpgradeable {
     // Before calling the initialize function, the owner address is zero address, which
     // causes the OnlyOwner modifier to revert if the minting function is called.
 
-    function mint(string calldata _tokenURI, address _owner) external onlyOwner returns(uint) {
+    function mint(string calldata _tokenURI, address _owner) external onlyOwner returns(uint nftNumber, bool success) {
         tokenCount.increment();
         _safeMint(_owner, tokenCount.current());
         _setTokenURI(tokenCount.current(), _tokenURI);
-        return(tokenCount.current());
+        nftNumber = tokenCount.current();
+        success = true;
     }
 
     modifier onlyOwner() {

@@ -23,11 +23,12 @@ contract NFTFactory {
     // Param: _ticker : The ticker of the new collection.
     // Param: _collectionOwner : The address of the owner i.e the one that can mint new NFTS from that collection.
     
-    function createNFTContract (string calldata _name, string calldata _ticker, address _collectionOwner) external returns(ERC721Upgradeable) {
-        address newNFTContract = _cloneNFTContract(_name, _ticker, _collectionOwner);
-        NFT _newNFT = NFT(newNFTContract);
+    function createNFTContract (string calldata _name, string calldata _ticker, address _collectionOwner) external returns(ERC721Upgradeable newNFTContract, bool success) {
+        address _newNFTContract = _cloneNFTContract(_name, _ticker, _collectionOwner);
+        NFT _newNFT = NFT(_newNFTContract);
         _nfts.push(_newNFT);
-        return(_newNFT);
+        newNFTContract = _newNFT;
+        success = true;
     }
 
     // Function _cloneNFTContract, private function that actually creates the new collection.

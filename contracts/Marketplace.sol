@@ -15,7 +15,6 @@ contract Marketplace is ReentrancyGuard {
 
     NFTFactory public NFTFactoryContract;
     NFT NFTContract;
-    uint NFTnumber;
 
     constructor() {
         NFTFactoryContract = new NFTFactory();
@@ -61,7 +60,9 @@ contract Marketplace is ReentrancyGuard {
     // Param: info(Optional): Used to store collection description.
 
     function createCollection (string memory _name, string memory _ticker, string calldata _imageLink, string memory _info) external {
-        ERC721Upgradeable _contract = NFTFactoryContract.createNFTContract(_name, _ticker, msg.sender);
+        (ERC721Upgradeable _contract, bool success) = NFTFactoryContract.createNFTContract(_name, _ticker, msg.sender);
+        require (success, "Collection creation failed.");
+
         collections.push(
             collection(
                 _contract, 
@@ -127,7 +128,8 @@ contract Marketplace is ReentrancyGuard {
         require (collections[_collectionId].Owner == msg.sender, "You are not the owner of this collection.");
 
         NFTContract = NFT(address(collections[_collectionId].Contract));
-        NFTnumber = NFTContract.mint(_tokenURI, msg.sender);
+        (uint NFTnumber, bool success) = NFTContract.mint(_tokenURI, msg.sender);
+        require(success, "NFT Mint failed.");
 
         tokenCount.increment();
         items[tokenCount.current()] = Item (NFTnumber, NFTContract, 0, 0, address(this), false);
@@ -167,7 +169,7 @@ contract Marketplace is ReentrancyGuard {
     // Function buyNFT, used to purchase NFT that is listed for sell.
     // Param: _itemId - The (Marketplace) ID of the NFT.
 
-    function buyNFT (uint _itemId) public payable nonReentrant {
+    function buyNFT (uint _itemId) external payable nonReentrant {
         require (items[_itemId].forSell == true, "NFT Not for sell.");
         require (msg.value >= items[_itemId].price, "Submitted price doesn't match nft price.");
 
@@ -198,7 +200,7 @@ contract Marketplace is ReentrancyGuard {
     // Param: _itemId - The (Marketplace) ID of the NFT.
     // Notice: The bid price is msg.value after gas costs. 
     
-    function bidOnNFT (uint _itemId) public payable nonReentrant {
+    function bidOnNFT (uint _itemId) external payable nonReentrant {
         require (msg.value > items[_itemId].bidPrice, "Your bid must be bigger than the current one.");
         
         //Returning the money of the latest bidder in case of outbid.
@@ -231,7 +233,7 @@ contract Marketplace is ReentrancyGuard {
     // Function acceptBid, used to accept current bid and transfer the NFT.
     // Param: _itemId - The (Marketplace) ID of the NFT.
 
-    function acceptBid (uint _itemId) public payable nonReentrant {
+    function acceptBid (uint _itemId) external payable nonReentrant {
         require (items[_itemId].bidPrice > 0, "No bids have been made on that nft.");
 
         //Ensuring that the caller actually has the ownership of that NFT.
