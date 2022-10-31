@@ -1,6 +1,6 @@
 # NFT Marketplace
 
-The main object of this project is to have a highly (gas) efficient and secure set of contracts with a simple frontend for interaction with them.
+The main object of this project is to have a highly (gas) efficient and secure set of contracts with a simple frontend for interaction with them. This is done by using Clones and some other patterns to reduce gas costs, while maintaining the security level high. 
 
 # Features
 
@@ -49,3 +49,6 @@ https://youtu.be/7V0RmTl4Snc
 
 2) My-own Items Menu:
 ![Screenshot](screenshots/screenshot002.png)
+
+3) Tests:
+![Screenshot](screenshots/tests.png)
