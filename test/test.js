@@ -1,5 +1,65 @@
 const { expect } = require("chai");
 
+describe("NFT", function () {
+
+    let NFT;
+    let NFTAddress;
+    let NFTContract;
+
+    before(async () => {
+        NFTContract = await ethers.getContractFactory("NFT");
+        NFT = await NFTContract.deploy();
+        await NFT.deployed();
+        NFTAddress = NFT.address;
+    })
+
+    it("Should not allow minting before initialization", async function () {
+        const [_, address2, address3, address4] = await ethers.getSigners();
+        await expect(NFT.mint("Test Token Uri", _.address)).to.be.revertedWith('You are not the owner of this collection or contract is not initialized.');
+    })
+
+    it("Should be initializable", async function () {
+        const [_, address2, address3, address4] = await ethers.getSigners();
+        const initialize = await NFT.initialize("Test Token", "TT", _.address);
+    })
+
+    it("Should be able to mint new nfts ", async function () {
+        const [_, address2, address3, address4] = await ethers.getSigners();
+        const transaction = await NFT.mint("Test Token Uri", _.address);
+    })
+
+    it("Should allow only the owner create nfts ", async function () {
+        const [_, address2, address3, address4] = await ethers.getSigners();
+        await expect(NFT.connect(address2).mint("Test Token Uri", address2.address)).to.be.revertedWith('You are not the owner of this collection or contract is not initialized.');
+    })
+
+    it("Should count the existing nfts", async function () {
+        expect(await NFT.tokenCount()).to.equal(1);
+    })
+})
+
+
+
+describe("NFT Factory", function () {
+
+    let NFTFactory;
+    let NFTFactoryAddress;
+    let NFTFactoryContract;
+
+    before(async () => {
+        NFTFactoryContract = await ethers.getContractFactory("NFTFactory");
+        NFTFactory = await NFTFactoryContract.deploy();
+        await NFTFactory.deployed();
+        NFTFactoryAddress = NFTFactory.address;
+    })
+
+    it("Should create new collections", async function () {
+        const [_, address2, address3, address4] = await ethers.getSigners();
+        const transaction = await NFTFactory.createNFTContract("Test Collection", "TC", _.address)
+    })
+})
+
+
 describe("Marketplace", function () {   
     
     let Marketplace;
@@ -18,24 +78,26 @@ describe("Marketplace", function () {
         NFTFactoryAddress = NFTFactory.address;
 
         MarketplaceContract = await ethers.getContractFactory("Marketplace");
-        Marketplace = await MarketplaceContract.deploy(NFTFactoryAddress);
+        Marketplace = await MarketplaceContract.deploy();
         await Marketplace.deployed();
         MarketplaceAddress = Marketplace.address;
 
     });
     
     it("Should track collections length", async function () {
-        expect(await Marketplace.lengthCollections()).to.equal(0);
+        expect(await Marketplace.returnCollectionsLength()).to.equal(0);
     });
 
     it("Should mint new collections", async function () {
         const name = "Victoria";
         const ticker = "VIKI";
-        const collection = await Marketplace.createCollection(name, ticker);
+        const imageLink = "https://www.test.com/image"
+        const info = "Some collection info"
+        const collection = await Marketplace.createCollection(name, ticker, imageLink, info);
         await collection.wait();
-        expect(await Marketplace.lengthCollections()).to.equal(1);
+        expect(await Marketplace.returnCollectionsLength()).to.equal(1);
     });
-
+    
     it("Should mint new NFTs", async function () {
         const nft = await Marketplace.mintNFT(0, "path");
         await nft.wait();
@@ -43,7 +105,7 @@ describe("Marketplace", function () {
         const secondnft = await Marketplace.mintNFT(0, "Path");
         await secondnft.wait();
         
-        expect(await Marketplace.lengthItems()).to.equal(2);
+        expect(await Marketplace.returnItemsLength()).to.equal(2);
     });
 
     it("Should be able to bid on item", async function () {
@@ -79,7 +141,7 @@ describe("Marketplace", function () {
         expect(await NFTContract.getApproved(1)).to.equal(MarketplaceAddress);
         expect(marketItem.forSell).to.equal(true);
     });
-
+    
     it("Should cancel NFT sell", async function () {
         await Marketplace.cancelSell(1);
         const marketItem = await Marketplace.items(1);
@@ -105,6 +167,4 @@ describe("Marketplace", function () {
         expect(newMarketItem.forSell).to.equal(false);
         expect(await NFTContract.ownerOf(1)).to.equal(address2.address);
     });
-
-
 });
