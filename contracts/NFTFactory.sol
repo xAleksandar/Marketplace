@@ -2,6 +2,7 @@
 pragma solidity ^0.8.4;
 
 import "./NFT.sol";
+import "./RentableNFT.sol";
 import "@openzeppelin/contracts/proxy/Clones.sol";
 
 // Factory Contract used by marketplace to produce new collection contracts.
@@ -13,9 +14,11 @@ contract NFTFactory {
     // The address of the Implementation contract that
     // is used from the Factory to clone new contracts.
     address public immutable Implementation;
+    address public immutable RentableImplementation;
     
     constructor() {
-        Implementation = address(new NFT());    
+        Implementation = address(new NFT());
+        RentableImplementation = address(new RentableNFT());
     }
 
     // Function createNFTContract, the main function used to create new collection contract.
@@ -23,8 +26,8 @@ contract NFTFactory {
     // Param: _ticker : The ticker of the new collection.
     // Param: _collectionOwner : The address of the owner i.e the one that can mint new NFTS from that collection.
     
-    function createNFTContract (string calldata _name, string calldata _ticker, address _collectionOwner) external returns(ERC721Upgradeable newNFTContract, bool success) {
-        address _newNFTContract = _cloneNFTContract(_name, _ticker, _collectionOwner);
+    function createNFTContract (string calldata _name, string calldata _ticker, address _collectionOwner, bool _rentable) external returns(ERC721Upgradeable newNFTContract, bool success) {
+        address _newNFTContract = _cloneNFTContract(_name, _ticker, _collectionOwner, _rentable);
         NFT _newNFT = NFT(_newNFTContract);
         _nfts.push(_newNFT);
         newNFTContract = _newNFT;
@@ -36,8 +39,16 @@ contract NFTFactory {
     // Param: _ticker : The ticker of the new collection.
     // Param: _collectionOwner : The address of the owner i.e the one that can mint new NFTS from that collection.
     
-    function _cloneNFTContract(string calldata _name, string calldata _ticker, address _collectionOwner) private returns(address) {
-        address _newNFTContract = Clones.clone(Implementation);
+    function _cloneNFTContract(string calldata _name, string calldata _ticker, address _collectionOwner, bool _rentable) private returns(address) {
+        
+        address _newNFTContract;
+
+        if (_rentable) {
+            _newNFTContract = Clones.clone(RentableImplementation);
+        } else {
+            _newNFTContract = Clones.clone(Implementation);
+        }
+        
         NFT(_newNFTContract).initialize(_name, _ticker, _collectionOwner);
         return(_newNFTContract);
     }

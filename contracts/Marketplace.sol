@@ -6,6 +6,7 @@ import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "./NFTFactory.sol";
+import "./RentableNFT.sol";
 import "./NFT.sol";
 
 contract Marketplace is ReentrancyGuard {
@@ -41,12 +42,14 @@ contract Marketplace is ReentrancyGuard {
     // Param: Owner: The address of the Collection creator.
     // Param: ImageLink(Optional): String used to store the link or base64 encoded version of the Collection Logo.
     // Param: info(Optional): Used to store collection description.
+    // Param: rentable: Describes if the NFTs from this collection can be rented. 
 
     struct collection {
         ERC721Upgradeable Contract;
         address Owner;
         string imageLink;
         string info;
+        bool rentable;
     }
 
     // Collections storage (Array)
@@ -59,19 +62,28 @@ contract Marketplace is ReentrancyGuard {
     // Param: ImageLink(Optional): String used to store the link or base64 encoded version of the Collection Logo.
     // Param: info(Optional): Used to store collection description.
 
-    function createCollection (string memory _name, string memory _ticker, string calldata _imageLink, string memory _info) external {
-        (ERC721Upgradeable _contract, bool success) = NFTFactoryContract.createNFTContract(_name, _ticker, msg.sender);
+    function createCollection (
+        string memory _name, 
+        string memory _ticker, 
+        string calldata _imageLink, 
+        string memory _info, 
+        bool _rentable
+        
+        ) external {
+        
+        (ERC721Upgradeable _contract, bool success) = NFTFactoryContract.createNFTContract(_name, _ticker, msg.sender, _rentable);
         require (success, "Collection creation failed.");
-
+        
         collections.push(
             collection(
                 _contract, 
                 msg.sender, 
                 _imageLink, 
-                _info
+                _info,
+                _rentable
             )
         );
-
+        
         emit newCollection (address(_contract), msg.sender);
     }
     
@@ -105,8 +117,11 @@ contract Marketplace is ReentrancyGuard {
         ERC721Upgradeable nft;
         uint price;
         uint bidPrice;
+        uint rentPrice;
+        uint rentPeriod;
         address bidAddress;
         bool forSell;
+        bool forRent;
     }
 
 
@@ -132,11 +147,16 @@ contract Marketplace is ReentrancyGuard {
         require(success, "NFT Mint failed.");
 
         tokenCount.increment();
-        items[tokenCount.current()] = Item (NFTnumber, NFTContract, 0, 0, address(this), false);
+
+        bool _rentable = false;
+        if (collections[_collectionId].rentable) {
+            _rentable = true;
+        }
+
+        items[tokenCount.current()] = Item (NFTnumber, NFTContract, 0, 0, 0, 0, address(this), false, _rentable);
 
         emit nft ("Mint", tokenCount.current(), msg.sender);
     }
-
 
     // Function sellNFT, used to put NFT for sale in the Marketplace.
     // Param: _itemId - The NFT ID (In the Marketplace contract).
@@ -171,12 +191,15 @@ contract Marketplace is ReentrancyGuard {
 
     function buyNFT (uint _itemId) external payable nonReentrant {
         require (items[_itemId].forSell == true, "NFT Not for sell.");
-        require (msg.value >= items[_itemId].price, "Submitted price doesn't match nft price.");
-
+        require (msg.value == items[_itemId].price, "Submitted price doesn't match nft price.");
+        if (items[_itemId].forRent) {
+            require (RentableNFT(address(items[_itemId].nft)).userOf(items[_itemId].tokenId) == address(0), "NFT Is currently rented to another person.");
+        }
+        
         address currentOwner = NFT(address(items[_itemId].nft)).ownerOf(items[_itemId].tokenId);
         items[_itemId].forSell = false;
         items[_itemId].bidPrice = 0;
-
+        
         NFT(address(items[_itemId].nft)).safeTransferFrom(currentOwner, msg.sender , items[_itemId].tokenId);
         
         (bool sent,) = currentOwner.call{value: items[_itemId].price}("");
@@ -185,6 +208,26 @@ contract Marketplace is ReentrancyGuard {
         emit nft ("Buy", _itemId, msg.sender);
     }
 
+    // Funtction rentNFT, used to put NFT for renting.
+    // Param: _itemId - The (Marketplace) ID of the NFT.
+    // Param: _price - The price to rent this NFT once.
+    // Param: _rentPeriod - Describes for how long the current NFT can be rented.
+    // @notice: The rent period is passed as seconds.
+
+    function rentNFT (uint _itemId, uint _price, uint _rentPeriod) external {
+        require (RentableNFT(address(items[_itemId].nft)).ownerOf(items[_itemId].tokenId) == msg.sender, "This is not your NFT.");
+        require(items[_itemId].forRent, "This NFT cannot be rented.");
+        items[_itemId].rentPrice = _price;
+        items[_itemId].rentPeriod = _rentPeriod;
+    }
+
+    function takeNFT (uint _itemId) external payable {
+        require (items[_itemId].rentPrice > 0, "This NFT is currently not for rent.");
+        require (RentableNFT(address(items[_itemId].nft)).userOf(items[_itemId].tokenId) == address(0), "NFT Is currently rented to another person.");
+        RentableNFT(address(items[_itemId].nft)).setUser(items[_itemId].tokenId, msg.sender, uint64(items[_itemId].rentPeriod));
+        (bool _sent, ) = RentableNFT(address(items[_itemId].nft)).ownerOf(items[_itemId].tokenId).call{value: msg.value}("");
+        require(_sent, "Unable to transfer funds.");
+    }
 
     // Function sendFunds, used to send funds to an address from the contract treasury instead of msg.sender.
     // Param: _to - The recepient address.
