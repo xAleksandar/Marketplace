@@ -2,7 +2,9 @@ async function main() {
 
   const Marketplace = await ethers.getContractFactory("Marketplace");
   const marketplace = await Marketplace.deploy();
+  
   saveFrontendFiles(marketplace , "Marketplace");
+  
   console.log('Marketplace deployed at: ', marketplace.address);
   
 }

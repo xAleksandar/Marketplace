@@ -59,7 +59,7 @@ const CreateCollection = ({marketplace, account}) => {
     }
 
     setOpenModal(true);
-    const transaction = await marketplace.createCollection(name, ticker, imagePath, description);
+    const transaction = await marketplace.createCollection(name, ticker, imagePath, description, false);
     
     setTransactionHash(transaction.hash)
     setCurrentModalStep(2)
