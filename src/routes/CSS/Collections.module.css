@@ -1,0 +1,75 @@
+
+.CollectionsContainer {
+  width: 100%;
+  min-height: 90vh;
+}
+
+.LoadingComponent {
+  height: 80vh;
+  padding: 30vh 0px 0px 0px;
+}
+
+.Collection {
+  padding: 20px;
+  margin: 0px auto;
+  width: 60%;
+  height: 20vh;
+  max-height: 20vh;
+  background-color: rgba(211, 211, 211, 0.2);
+  border: 4px solid royalblue;
+  border-radius: 25px;
+  display: flex;
+  
+}
+
+.CollectionImage {
+  border-radius: 10px;
+}
+
+.CollectionBody {
+  width: 100%;
+  height: 100%;
+  padding: 0px 0px 0px 10px;
+}
+
+.CollectionNames {
+  display: flex;
+}
+
+.CollectionName {
+  color: white;
+  font-size: 30px;
+  padding: 5px;
+  width: 70%;
+  border-left: 4px solid royalblue;
+  border-bottom: 4px solid royalblue;
+}
+
+.CollectionSymbol {
+  color: white;
+  font-size: 30px;
+  padding: 5px;
+  width: 30%;
+  border-left: 4px solid royalblue;
+  border-bottom: 4px solid royalblue;
+}
+
+.CollectionInfo {
+  color: white;
+  height: 60%;
+  text-align: left;
+  padding: 10px;
+  border-left: 4px solid royalblue;
+}
+
+.InfoBox {
+  margin: 40vh auto;
+  max-height: 7vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.InfoText {
+  font-size: 40px;
+  color: #4169E1;
+}

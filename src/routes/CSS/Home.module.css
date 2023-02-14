@@ -1,0 +1,84 @@
+
+.modalOverlay {
+  z-index: 9999;
+  width: 182vh;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalBox {
+  display: block;
+  background: white;
+  width: 70%;
+  height: 70%;
+  padding: 1rem;
+  border-radius: 1rem;
+}
+
+.InfoBox {
+  margin: 40vh auto;
+  max-height: 7vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.InfoText {
+  font-size: 40px;
+  color: #4169E1;
+}
+
+.Item {
+  padding: 0px 40px;
+  
+}
+
+.ItemsRow {
+  display: flex;
+  height: 60vh;
+  max-height: 60vh;
+}
+
+.HomeItem {
+  background-color: red;
+}
+
+.Container {
+  position: relative;
+  justify-content: center;
+}
+
+.ItemContainer {
+  position: relative;
+  margin-top: 20px;
+  padding: auto;
+}
+
+.AddressSearch {
+  border-radius: 20px;
+}
+
+.AddressSearchBar {
+  border-radius: 20px;
+  max-width: 30%;
+  margin: 20px auto;
+}
+
+.AddressSearchBtn {
+  position: absolute;
+  top: 4px;
+  left: 109vh;
+  width: 10vh;
+  height: 4vh;
+  border-radius: 10px;
+  background-color: rgb(138, 228, 3);
+}
+
+.AddressSearchBtn:hover {
+  transform: scale(1.03,1.05);
+  background-color: greenyellow;
+}
