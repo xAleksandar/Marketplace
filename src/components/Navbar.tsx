@@ -11,8 +11,7 @@ const Navigation = ({ className, web3Handler, account }: {className: string; web
         <Navbar expand="lg" className="Navbar" bg="secondary" variant="dark">
             <Container>
                 <Navbar.Brand style={{ display: "flex" }} href="">
-                    {/*<img src={market} width="40" height="40" className="" alt="" /> */}
-                    <img src={market} width="40" height="40" className="" alt="" />
+                    <img src={market} width="60" height="30" className="" alt="" />
                     <h1 style={{margin: "8px auto"}}>&nbsp; NFT Marketplace</h1>
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />

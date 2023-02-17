@@ -9,14 +9,14 @@ import marketNFT from '../types/marketNFT';
 import useModal from '../hooks/useModal';
 import Modal from '../components/Modal';
 
-const MyItems = ({ marketplace, account, NFTAbi, signer } : {marketplace: Contract , account: string, NFTAbi: ContractInterface, signer: JsonRpcSigner}) => {    
+const MyListedItems = ({ marketplace, account, NFTAbi, signer } : {marketplace: Contract , account: string, NFTAbi: ContractInterface, signer: JsonRpcSigner}) => {    
 
   const {openModal, transactionHash, modalState, toggleModal, changeModalState, setTx } = useModal();
-  const {loading, items, zeroItems, approveMarketplace} = useNFTManager(marketplace, signer, account, 2);
+  const {loading, items, zeroItems, approveMarketplace} = useNFTManager(marketplace, signer, account, 1);
 
 return (
 
-  <div>
+  <div className={styles.Container}>
 
   { loading ? (
     
@@ -61,4 +61,4 @@ return (
   </div>
 )}
 
-export default MyItems
+export default MyListedItems

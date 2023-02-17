@@ -3,7 +3,6 @@ import { PulseLoader } from 'react-spinners';
 import { Form } from 'react-bootstrap';
 import { Contract } from "ethers";
 import { chunk } from 'lodash';
-import { useState } from 'react'; 
 import Modal from '../components/Modal';
 import marketNFT from '../types/marketNFT';
 import useNFTManager from '../hooks/usеNFTManager';
@@ -13,10 +12,9 @@ import useModal from '../hooks/useModal'
 
 const Home = ({ marketplace, signer } : {marketplace: Contract , signer: JsonRpcSigner}) => {    
   
-  // const [opnModal, setOpnModal] = useState <boolean> (true)
-  const {loading, items, zeroItems, setUserAddress, setTrigger, setOpenModal, modalStep, transactionHash} = useNFTManager(marketplace, signer);
+  const {openModal, transactionHash, modalState, toggleModal, changeModalState, setTx } = useModal();
+  const {loading, items, zeroItems, setUserAddress, setTrigger} = useNFTManager(marketplace, signer, "", 0);
   
-  const {openModal} = useModal();
 return (
 
   <div>
@@ -42,7 +40,7 @@ return (
           <div>
             { openModal ? (
               <div className={styles.modalOverlay}>
-                {openModal && <Modal className={styles.Modal} setOpenModal={setOpenModal} currentStep={modalStep} transactionHash={transactionHash} />}          
+                <Modal className={styles.Modal} toggleModal={toggleModal} currentStep={modalState} transactionHash={transactionHash} />         
               </div>
             ) : (
               <div>
@@ -55,7 +53,7 @@ return (
               <button onClick={() => setTrigger("trigger")} className={styles.AddressSearchBtn}>Search</button>
             </div>
             <div className={styles.ItemContainer}>
-              {chunk(items, 4).map((y:marketNFT[]) => <div className={styles.ItemsRow}>{y.map(x => <div className={styles.Item}><li key={x.image}><span><HomeItem marketItem ={x} marketplace={marketplace} signer={signer} /></span></li></div>)}</div>)}
+              {chunk(items, 4).map((y:marketNFT[]) => <div className={styles.ItemsRow}>{y.map(x => <div className={styles.Item}><li key={x.image}><span><HomeItem marketItem ={x} marketplace={marketplace} signer={signer} toggleModal={toggleModal} changeModalState={changeModalState} setTx={setTx} /></span></li></div>)}</div>)}
             </div>
           </div>
           </div>

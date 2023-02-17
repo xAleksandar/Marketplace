@@ -1,29 +1,12 @@
 import { Contract } from "ethers";
-import { useState, useEffect } from 'react';
 import { PulseLoader } from 'react-spinners';
 import { JsonRpcSigner } from '@ethersproject/providers';
-
-import collectionType from '../types/Collection';
-import styles from './CSS/Collections.module.css';
 import useCollectionManager from '../hooks/usеCollectionManager';
+import styles from './CSS/Collections.module.css';
 
 const Collections = ({ marketplace, signer } : {marketplace: Contract, signer: JsonRpcSigner}) => {
   
-  const [loading,setLoading] = useState <boolean> (true)
-  const [collections, setCollections] = useState <collectionType[]> ([])
-  const { fetchCollections } = useCollectionManager(marketplace, signer);
-
-  useEffect(() => {
-    async function loadCollections() {
-      
-      setCollections(await fetchCollections(""))
-      setLoading(false);
-    
-    }
-
-  loadCollections() }, [])
-
-
+  const { loading, collections } = useCollectionManager(marketplace, signer, "");
 
   return (
     <div className={styles.CollectionsContainer}>

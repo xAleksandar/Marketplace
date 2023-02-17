@@ -1,8 +1,31 @@
-.ToggleGroupBox {
+.Container {
+  width: 100%;
+  min-height: 90vh;
+}
 
+.CollectionData {
+  margin: 5px;
+}
+
+.FormContainer {
+  max-width: 30%;
+  margin:15px auto;
+  justify-content: space-between;
 }
 
 .CollectionMintBtn {
   padding: 15px 30px;
-  margin: 60px auto;
+  margin: 25px auto;
+}
+
+.modalOverlay {
+  z-index: 9999;
+  width: 182vh;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

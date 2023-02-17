@@ -3,19 +3,30 @@ import { useState } from 'react';
 const useModal = () => {
 
     const [openModal, setOpenModal] = useState <boolean> (false)
+    const [modalState, setModalState] = useState <number> (1)
+    const [transactionHash, setTransactionHash] = useState <string> ("")
 
-    const toggle = () => {
+    const toggleModal = () => {
+        setModalState(1)
         setOpenModal(!openModal);
-        console.log('toggled', !openModal)
     }
 
-    const checkToggle = () => {
-        console.log('Modal in hook: ', openModal);
+    const changeModalState = (state: number) => {
+        console.log('Modal state now: ', modalState)
+        setModalState(state)
+    }
+
+    const setTx = (tx: string) => {
+        console.log('Transaction hash: ', tx);
+        setTransactionHash(tx)
     }
 
     return {openModal,
-            toggle,
-            checkToggle}
+            transactionHash,
+            modalState,
+            toggleModal,
+            changeModalState,
+            setTx}
 }
 
 export default useModal

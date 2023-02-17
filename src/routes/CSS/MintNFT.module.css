@@ -1,7 +1,7 @@
 
 .CollectionsContainer {
   width: 100%;
-  background-color: red;
+  min-height: 90vh;
 }
 
 .LoadingComponent {
@@ -109,10 +109,26 @@
   border-radius: 10px; 
 }
 
-.ModalBox{
+.modalOverlay {
+  z-index: 9999;
+  width: 182vh;
+  height: 100vh;
   position: absolute;
-  margin: 10px -60px;
+  top: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.Modal {
+.InfoBox {
+  margin: 40vh auto;
+  max-height: 7vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.InfoText {
+  font-size: 40px;
+  color: #4169E1;
 }

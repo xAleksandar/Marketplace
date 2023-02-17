@@ -4,9 +4,8 @@ import Stepper from "./Stepper";
 import { MetroSpinner } from "react-spinners-kit";
 import { Checkmark } from './checkmark';
 import {useNavigate} from 'react-router-dom';
-import { propTypes } from "react-bootstrap/esm/Image";
 
-const Modal = ({className, setOpenModal, currentStep, transactionHash} : {className: string, setOpenModal: React.Dispatch<React.SetStateAction<boolean>>, currentStep: number, transactionHash: string}) => {
+const Modal = ({className, toggleModal, currentStep, transactionHash} : {className: string, toggleModal: () => void, currentStep: number, transactionHash: string}) => {
 
   const navigate = useNavigate();
 
@@ -52,8 +51,7 @@ const Modal = ({className, setOpenModal, currentStep, transactionHash} : {classN
           </a>
 
           <button className="modalCloseBtn bg-blue-600 text-gray-300" onClick={() => {
-            setOpenModal(false);
-            window.location.reload()
+            toggleModal();
             }} >Close</button>
           </div>
         ) 

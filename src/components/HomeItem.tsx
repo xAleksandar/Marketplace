@@ -6,28 +6,18 @@ import { JsonRpcSigner } from '@ethersproject/providers';
 import styles from './CSS/Item.module.css';
 import marketNFT from '../types/marketNFT';
 import useNFTManager from '../hooks/usеNFTManager';
-import useModal from '../hooks/useModal';
 
-const HomeItem = ({ marketItem, marketplace, signer } : { marketItem: marketNFT, marketplace: Contract, signer: JsonRpcSigner }) => {
+const HomeItem = ({ marketItem, marketplace, signer, toggleModal, changeModalState, setTx } : { marketItem: marketNFT, marketplace: Contract, signer: JsonRpcSigner, toggleModal: () => void, changeModalState: (state: number) => void, setTx: (tx: string) => void }) => {
     
+    const {buyNFT, bidForNFT} = useNFTManager(marketplace, signer, "", 0);
     const [bidprice, setBidPrice] = useState <string> ("")
     const [bidstate, setBidState] = useState <number> (0)
-    const [trigger, setTrigger] = useState <string> ("")
-
-    const {buyNFT, bidForNFT} = useNFTManager(marketplace, signer);
-    const {openModal, toggle, checkToggle} = useModal();
-
-
-    let opnModal = false;
 
     async function changeBidState() {
         
         if (bidstate == 1) {
-            toggle()
-            checkToggle();
-            console.log('Modal is now: ', openModal)
-            marketItem = await bidForNFT(marketItem, bidprice);
-            console.log(marketItem)
+            toggleModal()
+            marketItem = await bidForNFT(marketItem, bidprice, changeModalState, setTx);
             setBidState(0)
         }
         
@@ -45,7 +35,10 @@ const HomeItem = ({ marketItem, marketplace, signer } : { marketItem: marketNFT,
                     <h2 className={styles.card__title}>{marketItem.name}</h2>
                     <h2 className={styles.card__info}>Price: {marketItem.price} ETH</h2>
                 </div>
-                <button onClick={() => buyNFT(marketItem)} className={styles.card__btn}><h5>Buy NFT</h5></button>
+                <button onClick={async () => {
+                    toggleModal();
+                    marketItem = await buyNFT(marketItem, changeModalState, setTx)}
+                } className={styles.card__btn}><h5>Buy NFT</h5></button>
             </div>
         )
     } else {
