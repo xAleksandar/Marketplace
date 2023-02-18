@@ -1,11 +1,11 @@
-import React, {useState} from 'react'
-import { Row, Form, Button } from 'react-bootstrap'
-import styles from './CSS/Item.module.css';
-import { Contract, ContractInterface, ethers } from "ethers"
-import MarketplaceAddress from './../contractsData/Marketplace-address.json'
-import marketNFT from '../types/marketNFT';
 import { JsonRpcSigner } from '@ethersproject/providers';
+import { Contract, ContractInterface } from "ethers"
+import { Form } from 'react-bootstrap'
+import {useState} from 'react'
+
 import useNFTManager from '../hooks/usеNFTManager';
+import marketNFT from '../types/marketNFT';
+import styles from './CSS/Item.module.css';
 
 const PersonalItem = ({marketItem, marketplace, NFTAbi, signer, approveMarketplace, toggleModal, changeModalState, setTx } : { marketItem: marketNFT, marketplace: Contract, NFTAbi: ContractInterface, signer: JsonRpcSigner, approveMarketplace: (item: marketNFT) => Promise<marketNFT>, toggleModal: () => void, changeModalState: (state: number) => void, setTx: (tx: string) => void}) => {
 

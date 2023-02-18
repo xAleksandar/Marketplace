@@ -34,9 +34,9 @@ return (
           <div className="Body">
            <Routes>
              {marketplace && signer && <Route path="/" element={<Home marketplace={marketplace} signer={signer} />} />}
-             {marketplace && signer && <Route path="/Collections" element={<Collections marketplace={marketplace} signer={signer} />} />}
+             {marketplace && signer && <Route path="/collections" element={<Collections marketplace={marketplace} signer={signer} />} />}
              {marketplace && signer && <Route path="/create" element={<CreateCollection marketplace={marketplace} signer={signer} account={account} />} />}
-             {marketplace && signer && <Route path="/MintNFT" element={<MintNFT marketplace={marketplace} account={account} signer={signer} />} />}
+             {marketplace && signer && <Route path="/mintNFT" element={<MintNFT marketplace={marketplace} account={account} signer={signer} />} />}
              {marketplace && signer && <Route path="/my-listed-items" element={<MyListedItems marketplace={marketplace} account={account} NFTAbi={NFTAbi.abi} signer={signer} />} />}
              {marketplace && signer && <Route path="/my-items" element={<MyItems marketplace={marketplace} account={account} NFTAbi={NFTAbi.abi} signer={signer} />} />}
             </Routes>

@@ -53,7 +53,7 @@ return (
               <button onClick={() => setTrigger("trigger")} className={styles.AddressSearchBtn}>Search</button>
             </div>
             <div className={styles.ItemContainer}>
-              {chunk(items, 4).map((y:marketNFT[]) => <div className={styles.ItemsRow}>{y.map(x => <div className={styles.Item}><li key={x.image}><span><HomeItem marketItem ={x} marketplace={marketplace} signer={signer} toggleModal={toggleModal} changeModalState={changeModalState} setTx={setTx} /></span></li></div>)}</div>)}
+              {chunk(items, 4).map((y:marketNFT[]) => <div className={styles.ItemsRow}>{y.map(x => <div className={styles.Item}><li key={x.name}><span><HomeItem marketItem ={x} marketplace={marketplace} signer={signer} toggleModal={toggleModal} changeModalState={changeModalState} setTx={setTx} /></span></li></div>)}</div>)}
             </div>
           </div>
           </div>

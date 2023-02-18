@@ -24,34 +24,22 @@ const useNFTManager = (marketplace: Contract, signer: JsonRpcSigner, initialUser
             // itemType 1: Items for Sell
             // itemType 2: items not for sell
             
+            var items: marketNFT[] = [];
+
             if (itemType === 0) {
-                let items = await fetchAllItems(initialUser);
-                if (items.length === 0) {
-                    setZeroItems(true)
-                    
-                    } else {
-                        setItems(items);
-                    }
-                
+                items = await fetchAllItems(initialUser);
             } else if (itemType === 1) {
-                let items = await fetchItems(initialUser, true);
-                if (items.length === 0) {
-                    setZeroItems(true)
-                    
-                    } else {
-                        setItems(items);
-                    }
-                
+                items = await fetchItems(initialUser, true);
             } else if (itemType === 2) {
-                let items = await fetchItems(initialUser, false);
-                if (items.length === 0) {
-                    setZeroItems(true)
-                    
-                    } else {
-                        setItems(items);
-                    }
+                items = await fetchItems(initialUser, false);
             }
             
+            if (items.length === 0) {
+                setZeroItems(true)    
+            } else {
+                setItems(items);
+            }
+
             setLoading(false)
         }
         
