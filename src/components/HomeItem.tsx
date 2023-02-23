@@ -7,7 +7,7 @@ import styles from './CSS/Item.module.css';
 import marketNFT from '../types/marketNFT';
 import useNFTManager from '../hooks/usеNFTManager';
 
-const HomeItem = ({ marketItem, marketplace, signer, toggleModal, changeModalState, setTx } : { marketItem: marketNFT, marketplace: Contract, signer: JsonRpcSigner, toggleModal: () => void, changeModalState: (state: number) => void, setTx: (tx: string) => void }) => {
+const HomeItem = ({ marketItem, marketplace, signer, toggleModal, changeModalState, setTx, ...rest } : { marketItem: marketNFT, marketplace: Contract, signer: JsonRpcSigner, toggleModal: () => void, changeModalState: (state: number) => void, setTx: (tx: string) => void }) => {
     
     const {buyNFT, bidForNFT} = useNFTManager(marketplace, signer, "", 0);
     const [bidprice, setBidPrice] = useState <string> ("")
@@ -29,7 +29,7 @@ const HomeItem = ({ marketItem, marketplace, signer, toggleModal, changeModalSta
 
     if (marketItem.forSell == true) {
         return (
-            <div className={styles.card}>
+            <div className={styles.card} {...rest}>
                 <div className={styles.card__body}>
                     <img src={marketItem.image} className={styles.card__image} />
                     <h2 className={styles.card__title}>{marketItem.name}</h2>
@@ -44,7 +44,7 @@ const HomeItem = ({ marketItem, marketplace, signer, toggleModal, changeModalSta
     } else {
         if (bidstate == 1){
             return (
-                <div className={styles.card}>
+                <div className={styles.card} {...rest}>
                     <div className={styles.card__body}>
                         <img src={marketItem.image} className={styles.card__image} />
                         <h2 className={styles.card__title}>{marketItem.name}</h2>
@@ -58,7 +58,7 @@ const HomeItem = ({ marketItem, marketplace, signer, toggleModal, changeModalSta
 
         } else {
             return (
-                <div className={styles.card}>
+                <div className={styles.card} {...rest}>
                     <div className={styles.card__body}>
                         <img src={marketItem.image} className={styles.card__image} />
                         <h2 className={styles.card__title}>{marketItem.name}</h2>

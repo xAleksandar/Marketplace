@@ -1,6 +1,7 @@
 import { chunk } from 'lodash';
 import { PulseLoader } from 'react-spinners';
 import { Contract, ContractInterface } from "ethers";
+import { useQueryClient } from '@tanstack/react-query';
 import { JsonRpcSigner } from '@ethersproject/providers';
 import PersonalItem from '../components/PersonalItem';
 import useNFTManager from '../hooks/usеNFTManager';
@@ -12,7 +13,10 @@ import Modal from '../components/Modal';
 const MyItems = ({ marketplace, account, NFTAbi, signer } : {marketplace: Contract , account: string, NFTAbi: ContractInterface, signer: JsonRpcSigner}) => {    
 
   const {openModal, transactionHash, modalState, toggleModal, changeModalState, setTx } = useModal();
-  const {loading, items, zeroItems, approveMarketplace} = useNFTManager(marketplace, signer, account, 2);
+  const {loading, zeroItems, approveMarketplace} = useNFTManager(marketplace, signer, account, 2);
+
+  const queryClient = useQueryClient();
+  const items: marketNFT[] | undefined = queryClient.getQueryData(["itemsNotForSell"]);
 
 return (
 
@@ -49,7 +53,7 @@ return (
         )}
           <div>   
             <div className={styles.ItemContainer}>
-              {chunk(items, 4).map((y: marketNFT[]) => <div className={styles.ItemsRow}>{y.map(x => <div className={styles.Item}><li key={x.image}><span><PersonalItem marketItem ={x} marketplace={marketplace} NFTAbi={NFTAbi} signer={signer} approveMarketplace={approveMarketplace} toggleModal={toggleModal} changeModalState={changeModalState} setTx={setTx} /></span></li></div>)}</div>)}
+              {chunk(items, 4).map((y: marketNFT[]) => <div className={styles.ItemsRow}>{y.map(x => <div className={styles.Item}><PersonalItem key={x.image} marketItem ={x} marketplace={marketplace} NFTAbi={NFTAbi} signer={signer} approveMarketplace={approveMarketplace} toggleModal={toggleModal} changeModalState={changeModalState} setTx={setTx} /></div>)}</div>)}
             </div>
           </div>
       

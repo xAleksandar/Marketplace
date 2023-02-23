@@ -2,7 +2,6 @@
   text-align: center;
   background-color: #282c34;
   padding: 20px;
-  
 }
 
 .App-logo {
@@ -40,8 +39,7 @@
 .Body {
   margin: 15px auto;
   min-height: 90%;
-  display: flex;
-  justify-content: center;
+  max-width: 1600px;
 }
 
 .InfoBox {
@@ -53,7 +51,7 @@
 
 .InfoText {
   font-size: 40px;
-  color: #4169E1;
+  color: #4169e1;
 }
 
 @keyframes App-logo-spin {
@@ -62,5 +60,22 @@
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 1000px) {
+  .Navbar {
+    margin: 0;
+    height: unset;
+  }
+}
+
+@media (max-width: 1300px) {
+  .Navbar {
+    width: 100%;
+    margin: 0;
+  }
+  .Navbar h1 {
+    font-size: 1.75rem;
   }
 }

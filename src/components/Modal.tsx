@@ -23,7 +23,7 @@ const Modal = ({className, toggleModal, currentStep, transactionHash} : {classNa
         
         return (
           <div className="modalInfo">
-              <h2 className="text-3xl text-blue-600 font-bold">Plase Approve Transaction in Metamask.</h2>
+              <h2 className="text-3xl text-blue-600 font-bold">Please Approve Transaction in Metamask.</h2>
           </div>
         )
         

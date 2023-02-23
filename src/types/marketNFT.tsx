@@ -1,6 +1,7 @@
 type marketNFT = {
     name: string
     tokenId: number
+    itemId: number
     collection: string
     price: string
     bidPrice: string

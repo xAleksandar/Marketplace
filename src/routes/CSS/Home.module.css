@@ -1,25 +1,3 @@
-
-.modalOverlay {
-  z-index: 9999;
-  width: 182vh;
-  height: 100vh;
-  position: absolute;
-  top: 0;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modalBox {
-  display: block;
-  background: white;
-  width: 70%;
-  height: 70%;
-  padding: 1rem;
-  border-radius: 1rem;
-}
-
 .InfoBox {
   margin: 40vh auto;
   max-height: 7vh;
@@ -29,18 +7,23 @@
 
 .InfoText {
   font-size: 40px;
-  color: #4169E1;
+  color: #4169e1;
 }
 
 .Item {
   padding: 0px 40px;
-  
+  margin-block: 40px;
+}
+
+.Item li {
+  list-style: none;
+  height: 100%;
 }
 
 .ItemsRow {
-  display: flex;
-  height: 60vh;
-  max-height: 60vh;
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
 }
 
 .HomeItem {
@@ -59,26 +42,35 @@
 }
 
 .AddressSearch {
-  border-radius: 20px;
-}
-
-.AddressSearchBar {
-  border-radius: 20px;
+  border-radius: 10px;
   max-width: 30%;
   margin: 20px auto;
+  background: #fff;
+}
+
+.AddressSearchBar,
+.AddressSearchBar:focus,
+.AddressSearchBar:active,
+.AddressSearchBar:focus-within {
+  box-shadow: none !important;
+  border: 0 !important;
+  outline: none !important;
 }
 
 .AddressSearchBtn {
-  position: absolute;
-  top: 4px;
-  left: 109vh;
-  width: 10vh;
-  height: 4vh;
+  margin: 5px;
+  padding: 8px;
   border-radius: 10px;
   background-color: rgb(138, 228, 3);
 }
 
 .AddressSearchBtn:hover {
-  transform: scale(1.03,1.05);
+  transform: scale(1.03);
   background-color: greenyellow;
+}
+
+@media (max-width: 1300px) {
+  .ItemsRow {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }

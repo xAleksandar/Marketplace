@@ -9,6 +9,7 @@ const useModal = () => {
     const toggleModal = () => {
         setModalState(1)
         setOpenModal(!openModal);
+        document.body.style.overflowY = !openModal ? 'hidden' : 'auto'; 
     }
 
     const changeModalState = (state: number) => {

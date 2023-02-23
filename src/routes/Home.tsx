@@ -1,4 +1,5 @@
 import { JsonRpcSigner } from '@ethersproject/providers';
+import { useQueryClient } from '@tanstack/react-query';
 import { PulseLoader } from 'react-spinners';
 import { Form } from 'react-bootstrap';
 import { Contract } from "ethers";
@@ -11,10 +12,12 @@ import styles from './CSS/Home.module.css'
 import useModal from '../hooks/useModal'
 
 const Home = ({ marketplace, signer } : {marketplace: Contract , signer: JsonRpcSigner}) => {    
-  
   const {openModal, transactionHash, modalState, toggleModal, changeModalState, setTx } = useModal();
-  const {loading, items, zeroItems, setUserAddress, setTrigger} = useNFTManager(marketplace, signer, "", 0);
+  const {loading, zeroItems, setUserAddress, setTrigger} = useNFTManager(marketplace, signer, "", 0);
   
+  const queryClient = useQueryClient();
+  const items: marketNFT[] | undefined = queryClient.getQueryData(["allItems"]);
+
 return (
 
   <div>
@@ -48,12 +51,12 @@ return (
             )}
             
           <div className={styles.Container}>
-            <div className={styles.AddressSearch}>
+            <div className={`${styles.AddressSearch} d-flex`}>
               <Form.Control className={styles.AddressSearchBar} onChange={(e) => setUserAddress(e.target.value)} size="lg" placeholder="Search by owner address" />
               <button onClick={() => setTrigger("trigger")} className={styles.AddressSearchBtn}>Search</button>
             </div>
             <div className={styles.ItemContainer}>
-              {chunk(items, 4).map((y:marketNFT[]) => <div className={styles.ItemsRow}>{y.map(x => <div className={styles.Item}><li key={x.name}><span><HomeItem marketItem ={x} marketplace={marketplace} signer={signer} toggleModal={toggleModal} changeModalState={changeModalState} setTx={setTx} /></span></li></div>)}</div>)}
+              {chunk(items, 4).map((y:marketNFT[]) => <div className={styles.ItemsRow}>{y.map(x => <div className={styles.Item}><HomeItem key={x.name} marketItem ={x} marketplace={marketplace} signer={signer} toggleModal={toggleModal} changeModalState={changeModalState} setTx={setTx} /></div>)}</div>)}
             </div>
           </div>
           </div>

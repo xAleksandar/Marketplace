@@ -3,22 +3,27 @@ import { Contract, ContractInterface } from "ethers"
 import { Form } from 'react-bootstrap'
 import {useState} from 'react'
 
+import { useSellNFT } from '../hooks/NFTs/sellNFT/useSellNFT';
+import { useUnlistNFT } from '../hooks/NFTs/sellNFT/unlistNFT/useUnlistNFT';
+
 import useNFTManager from '../hooks/usеNFTManager';
 import marketNFT from '../types/marketNFT';
 import styles from './CSS/Item.module.css';
 
-const PersonalItem = ({marketItem, marketplace, NFTAbi, signer, approveMarketplace, toggleModal, changeModalState, setTx } : { marketItem: marketNFT, marketplace: Contract, NFTAbi: ContractInterface, signer: JsonRpcSigner, approveMarketplace: (item: marketNFT) => Promise<marketNFT>, toggleModal: () => void, changeModalState: (state: number) => void, setTx: (tx: string) => void}) => {
+const PersonalItem = ({marketItem, marketplace, NFTAbi, signer, approveMarketplace, toggleModal, changeModalState, setTx, ...rest } : { marketItem: marketNFT, marketplace: Contract, NFTAbi: ContractInterface, signer: JsonRpcSigner, approveMarketplace: (item: marketNFT) => Promise<marketNFT>, toggleModal: () => void, changeModalState: (state: number) => void, setTx: (tx: string) => void}) => {
 
     const [price, setPrice] = useState <string> ("")
     const [sellstate, setSellState] = useState <number> (0)
     const [item, setItem] = useState <marketNFT> (marketItem);
-    const { sellNFT, unlistNFT, acceptBid } = useNFTManager(marketplace, signer, "", 0);
+    const { acceptBid } = useNFTManager(marketplace, signer, "", 0);
     
+    const { mutate:sellNFT } = useSellNFT(marketplace, signer, "", 0);
+    const { mutate:unlistNFT } = useUnlistNFT(marketplace, signer, "", 0);
     function changeSellState() {
         
         if (sellstate == 1) {
             toggleModal();
-            sellNFT(marketItem, price, changeModalState, setTx);
+            sellNFT({item, price, changeModalState, setTx});
             setSellState(0)
         }
         
@@ -28,7 +33,7 @@ const PersonalItem = ({marketItem, marketplace, NFTAbi, signer, approveMarketpla
     }
 
     return (
-        <div className={styles.card}>
+        <div className={styles.card} {...rest}>
             <div className={styles.card__body}>
                 <img src={item.image} className={styles.card__image} />
                 <h2 className={styles.card__title}>{item.name}</h2>
@@ -40,7 +45,7 @@ const PersonalItem = ({marketItem, marketplace, NFTAbi, signer, approveMarketpla
                 { item.forSell ? (
                     <button onClick={() => {
                         toggleModal();
-                        unlistNFT(marketItem, changeModalState, setTx);
+                        unlistNFT({item, changeModalState, setTx});
                     }} className={styles.card__btn}>Unlist</button>
                 ) : (
                     <div>

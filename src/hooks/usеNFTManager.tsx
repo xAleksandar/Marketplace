@@ -1,11 +1,12 @@
 import { ethers, Contract } from 'ethers';
 import { useState, useEffect } from 'react';
 import { JsonRpcSigner } from '@ethersproject/providers';
-
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import blockchainNFT from '../types/blockchainNFT';
 import marketNFT from '../types/marketNFT';
 import NFTAbi from "../contractsData/NFT.json";
 import MarketplaceAddress from '../contractsData/Marketplace-address.json';
+import axios from 'axios';
 
 const useNFTManager = (marketplace: Contract, signer: JsonRpcSigner, initialUser:string, itemType: number) => {
 
@@ -17,35 +18,27 @@ const useNFTManager = (marketplace: Contract, signer: JsonRpcSigner, initialUser
     const [userAddress, setUserAddress] = useState <string> ("")
     const [trigger, setTrigger] = useState <string> ("")
 
-    useEffect(() => {
-        async function load() {
-          
-            // itemType 0: All Items
-            // itemType 1: Items for Sell
-            // itemType 2: items not for sell
-            
-            var items: marketNFT[] = [];
-
-            if (itemType === 0) {
-                items = await fetchAllItems(initialUser);
-            } else if (itemType === 1) {
-                items = await fetchItems(initialUser, true);
-            } else if (itemType === 2) {
-                items = await fetchItems(initialUser, false);
-            }
-            
-            if (items.length === 0) {
-                setZeroItems(true)    
-            } else {
-                setItems(items);
-            }
-
+    useQuery({
+        queryKey: ["allItems"],
+        queryFn: async () => {
             setLoading(false)
+            return await fetchAllItems();
         }
-        
-        load()}, [userAddress])
-    
+    })
 
+    useQuery({
+        queryKey: ["itemsForSell"],
+        queryFn: async () => {
+            return await fetchUserItems(initialUser, true);
+        }
+    })
+
+    useQuery({
+        queryKey: ["itemsNotForSell"],
+        queryFn: async () => {
+            return await fetchUserItems(initialUser, false);
+        }
+    })
 
     const mintNFT = async (collectionId: number, image: string, changeModalState: (state:number) => void, setTx: (tx: string) => void) => {
         const transaction = await marketplace.mintNFT(collectionId, image);
@@ -183,119 +176,44 @@ const useNFTManager = (marketplace: Contract, signer: JsonRpcSigner, initialUser
 
 
 
-    const fetchItems = async (address: string, forSell: boolean) => {
-
-        const totalmarketitems = (await marketplace.returnItemsLength()).toString()
-        const changeLoadingMessage = Math.round((totalmarketitems.length / 100 ) * 85)
-        let items: marketNFT[] = []
+    const fetchUserItems = async (address: string, forSell: boolean) => {
+        const result = await axios.get('http://localhost:5000/api/items');
+        const allItems = result.data;
         
-        for (let i = 1; i <=totalmarketitems; i++) {
-    
-            let nft: blockchainNFT = await marketplace.items(i)
-            if (nft.forSell === forSell) {
-                let NFTcontract: Contract = new Contract(nft.nft, NFTAbi.abi, signer)
-                let nftname = await NFTcontract.name()
-                let uri = await NFTcontract.tokenURI(nft.tokenId.toString())
-                let approvedAddress = await NFTcontract.getApproved(nft.tokenId);
-                let isApproved = (approvedAddress === MarketplaceAddress.address)
+        let items: marketNFT[] = [];
 
-                if (address.length >= 1) {
-                    let nftowner = await NFTcontract.ownerOf(nft.tokenId);
-                    if (nftowner.toLowerCase().includes(address.toLowerCase())) {
-                        items.push({
-                            name: nftname + " #" + nft.tokenId.toString(),
-                            tokenId: nft.tokenId,
-                            collection: nft.nft,
-                            price: ethers.utils.formatEther(nft.price),
-                            bidPrice: ethers.utils.formatEther(nft.bidPrice),
-                            rentPrice: ethers.utils.formatEther(nft.rentPrice),
-                            rentPeriod: nft.rentPeriod,
-                            bidAddress: nft.bidAddress,
-                            forSell: nft.forSell,
-                            forRent: nft.forSell,
-                            image: uri,
-                            isMarketplaceApproved: isApproved
-                        })
-                    }
-                } else {
-
-                    items.push({
-                        name: nftname + " #" + nft.tokenId.toString(),
-                        tokenId: nft.tokenId,
-                        collection: nft.nft,
-                        price: ethers.utils.formatEther(nft.price),
-                        bidPrice: ethers.utils.formatEther(nft.bidPrice),
-                        rentPrice: ethers.utils.formatEther(nft.rentPrice),
-                        rentPeriod: nft.rentPeriod,
-                        bidAddress: nft.bidAddress,
-                        forSell: nft.forSell,
-                        forRent: nft.forSell,
-                        image: uri,
-                        isMarketplaceApproved: isApproved
-                    })
-                }
-            }
-        }
-
-        items.sort((a, b) => a.name.localeCompare(b.name))
-        return items;
-    }
-
-
-
-    const fetchAllItems = async (address: string) => {
-
-        const totalmarketitems = (await marketplace.returnItemsLength()).toString()
-        const changeLoadingMessage = Math.round((totalmarketitems.length / 100 ) * 85)
-        let items: marketNFT[] = []
-        
-        for (let i = 1; i <=totalmarketitems; i++) {
-    
-            let nft: blockchainNFT = await marketplace.items(i)
-            let NFTcontract: Contract = new Contract(nft.nft, NFTAbi.abi, signer)
-            let nftname = await NFTcontract.name()
-            let uri = await NFTcontract.tokenURI(nft.tokenId.toString())
-            let approvedAddress = await NFTcontract.getApproved(nft.tokenId);
-            let isApproved = (approvedAddress === MarketplaceAddress.address)
-
-            if (address.length >= 1) {
-                let nftowner = await NFTcontract.ownerOf(nft.tokenId);
-                if (nftowner.toLowerCase().includes(address.toLowerCase())) {
-                    items.push({
-                        name: nftname + " #" + nft.tokenId.toString(),
-                        tokenId: nft.tokenId,
-                        collection: nft.nft,
-                        price: ethers.utils.formatEther(nft.price),
-                        bidPrice: ethers.utils.formatEther(nft.bidPrice),
-                        rentPrice: ethers.utils.formatEther(nft.rentPrice),
-                        rentPeriod: nft.rentPeriod,
-                        bidAddress: nft.bidAddress,
-                        forSell: nft.forSell,
-                        forRent: nft.forSell,
-                        image: uri,
-                        isMarketplaceApproved: isApproved
-                    })
-                }
-            } else {
-
+        for (let i = 0; i < allItems.length; i++) {
+            if (allItems[i].owner.toLowerCase().includes(address.toLowerCase()) && allItems[i].forSell == forSell) {
                 items.push({
-                    name: nftname + " #" + nft.tokenId.toString(),
-                    tokenId: nft.tokenId,
-                    collection: nft.nft,
-                    price: ethers.utils.formatEther(nft.price),
-                    bidPrice: ethers.utils.formatEther(nft.bidPrice),
-                    rentPrice: ethers.utils.formatEther(nft.rentPrice),
-                    rentPeriod: nft.rentPeriod,
-                    bidAddress: nft.bidAddress,
-                    forSell: nft.forSell,
-                    forRent: nft.forSell,
-                    image: uri,
-                    isMarketplaceApproved: isApproved
+                    name: allItems[i].name,
+                    tokenId: allItems[i].tokenId,
+                    itemId: allItems[i].tokenId,
+                    collection: allItems[i].contract,
+                    price: ethers.utils.formatEther(allItems[i].price),
+                    bidPrice: ethers.utils.formatEther(allItems[i].bidPrice),
+                    rentPrice: ethers.utils.formatEther(allItems[i].rentPrice),
+                    rentPeriod: allItems[i].rentPeriod,
+                    bidAddress: allItems[i].bidAddress,
+                    forSell: allItems[i].forSell,
+                    forRent: allItems[i].forSell,
+                    image: allItems[i].image,
+                    isMarketplaceApproved: allItems[i].isMarketplaceApproved
                 })
             }
         }
         
         items.sort((a, b) => a.name.localeCompare(b.name))
+        return items; 
+    }
+
+
+
+    const fetchAllItems = async () => {
+        const result = await axios.get('http://localhost:5000/api/items');
+        let items: marketNFT[] = result.data;
+        items.map(x => {x.bidPrice = ethers.utils.formatEther(x.bidPrice)
+                        x.price = ethers.utils.formatEther(x.price)})
+        
         return items;
     }
 

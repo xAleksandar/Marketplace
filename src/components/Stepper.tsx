@@ -14,7 +14,6 @@ const Stepper = ({ steps, currentStep } : {steps: string[], currentStep:number})
   
   const updateStep = (stepNumber: number, steps: stepType[]) => {
     const newSteps = [...steps];
-    console.log(newSteps);
     let count = 0;
     while (count < newSteps.length) {
       //current step
