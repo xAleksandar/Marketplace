@@ -11,13 +11,6 @@ const useMarketplace = () => {
     const [account, setAccount] = useState <string> ('')
     const [signer, setSigner] = useState <JsonRpcSigner> ()
     const [marketplace, setMarketplace] = useState <Contract | undefined> ();
-
-    // useEffect(() => {
-    //     async function load() {
-
-    // load()}, [])
-
-    // MetaMask Login/Connects
     
     const connect = async (): Promise<void> => {
         

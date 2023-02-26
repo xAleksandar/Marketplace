@@ -36,12 +36,12 @@ const useCollectionManager = (marketplace: Contract, signer: JsonRpcSigner, init
     
 
     const mintCollection = async (image: string, changeModalState: (state:number) => void, setTx: (tx: string) => void) => {
+        console.log('Image is: ', image)
         const transaction = await marketplace.createCollection(
             collectionName, 
             collectionTicker, 
             image, 
-            collectionDescription,
-            collectionIsRentable);
+            collectionDescription);
 
         setTx(transaction.hash)
         changeModalState(2)

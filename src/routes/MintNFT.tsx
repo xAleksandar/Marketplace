@@ -3,9 +3,8 @@ import { Contract, ContractInterface } from 'ethers';
 import { PulseLoader } from 'react-spinners';
 import { Form } from 'react-bootstrap';
 import { useState } from 'react';
-
+import { useMintNFT } from '../hooks/NFTs/mintNFT/useMintNFT';
 import useCollectionManager from "../hooks/usеCollectionManager";
-import useNFTManager from "../hooks/usеNFTManager";
 import useModal from "../hooks/useModal";
 import useIPFS from "../hooks/useIPFS";
 
@@ -16,10 +15,9 @@ const MintNFT = ({ marketplace, account, signer } : {marketplace: Contract , acc
 
   const { openModal, transactionHash, modalState, toggleModal, changeModalState, setTx } = useModal();
   const { loading, zeroItems, collections } = useCollectionManager(marketplace, signer, account);
-  const { mintNFT } = useNFTManager(marketplace, signer, account, 0);
+  const { mutate: mintNFT} = useMintNFT(marketplace);
   const { uploadToIPFS, image } = useIPFS();
-
-
+  
   const [collectionSellected, setCollectionSellected] = useState <boolean> (false);
   const [collectionId, setCollectionId] = useState <number> (0);
   
@@ -58,7 +56,7 @@ const MintNFT = ({ marketplace, account, signer } : {marketplace: Contract , acc
             
             <button className={styles.NFTMintBtn} onClick={() => {
               toggleModal();
-              mintNFT(collectionId, image, changeModalState, setTx)
+              mintNFT({collectionId, image, changeModalState, setTx})
             }}>
               Mint
             </button>

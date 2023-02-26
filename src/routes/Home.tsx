@@ -6,14 +6,14 @@ import { Contract } from "ethers";
 import { chunk } from 'lodash';
 import Modal from '../components/Modal';
 import marketNFT from '../types/marketNFT';
-import useNFTManager from '../hooks/usеNFTManager';
+import useFetchItems from '../hooks/usеFetchItems';
 import HomeItem from '../components/HomeItem';
 import styles from './CSS/Home.module.css'
 import useModal from '../hooks/useModal'
 
 const Home = ({ marketplace, signer } : {marketplace: Contract , signer: JsonRpcSigner}) => {    
   const {openModal, transactionHash, modalState, toggleModal, changeModalState, setTx } = useModal();
-  const {loading, zeroItems, setUserAddress, setTrigger} = useNFTManager(marketplace, signer, "", 0);
+  const {loading, setUserAddress, setTrigger} = useFetchItems(marketplace, signer, "", 0);
   
   const queryClient = useQueryClient();
   const items: marketNFT[] | undefined = queryClient.getQueryData(["allItems"]);
@@ -33,7 +33,7 @@ return (
     ) : (
       
       <div>
-        { zeroItems ? (
+        { items && items.length == 0 ? (
           
           <div className={styles.MiddleSreenText}>
             No items found.

@@ -1,28 +1,25 @@
 import { chunk } from 'lodash';
+import { Contract } from "ethers";
 import { PulseLoader } from 'react-spinners';
-import { Contract, ContractInterface } from "ethers";
 import { useQueryClient } from '@tanstack/react-query';
 import { JsonRpcSigner } from '@ethersproject/providers';
 import PersonalItem from '../components/PersonalItem';
-import useNFTManager from '../hooks/usеNFTManager';
 import styles from './CSS/MyItems.module.css';
 import marketNFT from '../types/marketNFT';
 import useModal from '../hooks/useModal';
 import Modal from '../components/Modal';
 
-const MyListedItems = ({ marketplace, account, NFTAbi, signer } : {marketplace: Contract , account: string, NFTAbi: ContractInterface, signer: JsonRpcSigner}) => {    
-
-  const {openModal, transactionHash, modalState, toggleModal, changeModalState, setTx } = useModal();
-  const {loading, zeroItems, approveMarketplace} = useNFTManager(marketplace, signer, account, 1);
+const MyListedItems = ({ marketplace, signer } : {marketplace: Contract , signer: JsonRpcSigner}) => {    
 
   const queryClient= useQueryClient();
   const items: marketNFT[] | undefined = queryClient.getQueryData(["itemsForSell"]);
+  const {openModal, transactionHash, modalState, toggleModal, changeModalState, setTx } = useModal();
 
 return (
 
   <div className={styles.Container}>
 
-  { loading ? (
+  { !items ? (
     
     <div className={styles.InfoBox}>
       <div className={styles.InfoText}>
@@ -35,10 +32,10 @@ return (
     
     <div className={styles.Container}>
       
-      { zeroItems ? (
-        <div className={styles.LoadingComponent}>
-          <div className={styles.LoadingMessage}>
-          No any items to show.
+      { items && items.length == 0 ? (
+        <div className={styles.InfoBox}>
+          <div className={styles.InfoText}>
+            No any items to show.
           </div>
         </div>
       ) : (
@@ -53,7 +50,7 @@ return (
         )}
           <div>   
             <div className={styles.ItemContainer}>
-              {chunk(items, 4).map((y: marketNFT[]) => <div className={styles.ItemsRow}>{y.map(x => <div className={styles.Item}><PersonalItem key={x.image} marketItem ={x} marketplace={marketplace} NFTAbi={NFTAbi} signer={signer} approveMarketplace={approveMarketplace} toggleModal={toggleModal} changeModalState={changeModalState} setTx={setTx} /></div>)}</div>)}
+              {chunk(items, 4).map((y: marketNFT[]) => <div className={styles.ItemsRow}>{y.map(x => <div className={styles.Item}><PersonalItem key={x.image} marketItem ={x} marketplace={marketplace} signer={signer} toggleModal={toggleModal} changeModalState={changeModalState} setTx={setTx} /></div>)}</div>)}
             </div>
           </div>
       
