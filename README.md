@@ -11,19 +11,6 @@ This is a rework of the initial marketplace project, that aims to bring better r
 # To-Do List:
 1) Implement Rentable NFTs features.
 
-# Setup
-
-Register at infura.com and make a new application api. Rename ```sample-infura.json``` to ```infura.json``` and set the reqired keys accordingly. 
-
-1. Install packages
-```bash
-yarn
-```
-2. Run the App
-```bash
-yarn start
-```
-
 # Videos
 
 1) Simple marketplace tour.
